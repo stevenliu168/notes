@@ -1,0 +1,16 @@
+https://blog.csdn.net/fsfsfsdfsdfdr/article/details/82453463
+
+VS2015安装完成后，会提示许可证：30天试用期（仅供评估使用），此许可证已过期。你的试用期已过期。请使用联机账号登录以获取许可证。
+
+
+
+1、解决方法一：更新密钥
+
+专业版：HMGNV-WCYXV-X7G9W-YCX63-B98R2
+企业版：HM6NR-QXX7C-DFW2Y-8B82K-WTYJV
+
+2、使用的邮箱注册账号，然后进行登录
+
+一般注册时注册为社区版用户，所以无论你下载那个版本的VS，登录VS2015后自动识别你的账号类型，然后启动对应的登录页面，进行相应权限的设置，其中包含延长许可证。
+
+转载：https://blog.csdn.net/yhd0916/article/details/73368826

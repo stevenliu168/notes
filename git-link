@@ -17,11 +17,20 @@ ssh-keygen -t rsa -C "61491195@qq.com"
 
 
 git add底层实现
-一文讲透 Git 底层数据结构和原理
-https://blog.csdn.net/leo187/article/details/106233706
+Git 底层原理
+https://blog.csdn.net/abcnull/article/details/90288499
 
 GIT底层原理（一）
 https://blog.csdn.net/qq360694660/article/details/80256367?utm_source=blogxgwz0
 
-Git 底层原理
-https://blog.csdn.net/abcnull/article/details/90288499
+一文讲透 Git 底层数据结构和原理
+https://blog.csdn.net/leo187/article/details/106233706
+
+git实现原理（从常见的操作来解释git的底层原理，再也不怯）
+https://blog.csdn.net/weixin_42762133/article/details/105458252
+
+git底层原理（一）
+https://blog.csdn.net/weixin_30505225/article/details/98320166
+
+深入理解Git的实现原理
+https://blog.csdn.net/qq_35661171/article/details/100105780

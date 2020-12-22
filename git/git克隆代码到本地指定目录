@@ -1,0 +1,7 @@
+https://www.cnblogs.com/xiaogou/p/11663174.html
+git克隆代码到本地指定目录
+先到要选定的目录里面如：www目录，调出git命令窗口
+
+输入下面命令即可克隆代码到www下面的gamebox_php_ceshi目录里面
+
+$ git clone git@192.168.0.180:gamebox/gamebox_php.git ./gamebox_php_ceshi

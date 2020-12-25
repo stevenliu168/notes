@@ -1,0 +1,15 @@
+配置python更新的源
+
+lxn@ubuntu:/home/newdisk2/lxn/ARMNativeReop/pclintxtoolbox/bin$ cd /home/lxn
+lxn@ubuntu:~$ mkdir .pip
+添加pip.conf内容如下：
+lxn@ubuntu:~/.pip$ cat pip.conf
+[global]
+trusted-host=cmc-cd-mirror.rnd.huawei.com
+index-url=http://cmc-cd-mirror.rnd.huawei.com/pypi/simple
+
+安装regex模块
+lxn@ubuntu:~/.pip$ python -m pip install regex
+
+查看python安装的模块
+lxn@ubuntu:~/.pip$ pip list

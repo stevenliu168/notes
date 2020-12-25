@@ -1,0 +1,36 @@
+https://blog.csdn.net/thanklife/article/details/72821495?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-14.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-14.nonecase
+Visual Assist X助手的一些使用技巧和快捷键
+部分快捷键
+Shift+Alt+F  Find References 查找引用
+Shift+Alt+S  FindSynbolDialog打开查找符号对话框
+Alt+G        GotoImplementation调到实现
+Alt+M        ListMethodsInCurrentFile
+Alt+Left      Arrow NavigateBack  后台
+Alt+O(字母o)    OpenCurrespondingFile    .h/.cpp切换
+Shift+Alt+O     OpenFileInSolutionDialog打开解决方案文件对话框
+Ctrl+Shift+V    Parse弹出最近10个copy的内容菜单
+
+
+重构
+Shift+Alt+Q     RefactorContextMenu  弹出重构菜单
+Shift+Alt+C     RefactorCreateFromUsage
+Shift+Alt+R     RefactorRename改名
+
+
+Alt+Down        Arraw ScopeNext  跳到作用范围
+Alt+Up          Arraw ScopePrevious
+
+
+https://blog.csdn.net/yl_wh/article/details/7934822
+Visual Assist X 最有用的快捷键
+1、Alt + G： 在定义与声明之间互跳。
+2、Alt + O： 在.h与.cpp之间互跳。（O是字母O，不是数字零）
+3、Alt + Shift + Q：鼠标定位到函数名上，若是在h文件中，按此快捷键会弹出右键菜单，里面有个选项--创建定义；若是在cpp文件中，则按此快捷键会弹出右键菜单，里面有一个选项--创建声明。 这在定义好接口之后，再来写实现时，配合Alt+O是非常快捷的。当然，这种情况下，鼠标右击与Alt+O配合会更快，嘿嘿。
+4、Alt + Shift + R：当想改掉一个类名或是其他东西的命名时，可能已经有很多地方引用这个名称了，这时按下此快捷键，可以很方便的辅助你重命名。
+5、Alt + Shift + S：方便你寻找某个对象或变量等等。
+6、Alt + Shift + O：定位文件。项目文件太多时，这个会帮上大忙，当然，你的文件名命名最好有个比较好的规范。
+7、Alt + Shift + F：光标放到某个字符串上，按下此键，会找出所有引用了这个字符串的地方。
+上面有些快捷键使用的前提是需要光标定位到函数或类、对象、变量名上。
+配合ViEmu，以及visual studio本身的快捷键，这个开发环境简直太爽了。
+快捷键参考：http://www.wholetomato.com/products/features/shortcut.asp
+

@@ -24,3 +24,10 @@ redis.tar.gz                                            100% 1696KB   1.7MB/s   
 
 # scp root@192.168.9.142:/usr/local/src/cp_dir/*.php /usr/local/src/  //拷贝多个文件
 # scp -r root@192.168.9.142:/usr/local/src/cp_dir/ /usr/local/src/   //拷贝目录
+
+
+//拷贝10.67.164.228机子上的/home/newdisk2/lxn/VMIEngine/out/native/release_imgs/InstructionPhoneServer.tar.gz到当前目录
+scp root@10.67.164.228:/home/newdisk2/lxn/VMIEngine/out/native/release_imgs/InstructionPhoneServer.tar.gz ./
+
+//拷贝10.67.165.36机子上的/home/lxn目录下的所有文件到当前目录
+scp root@10.67.165.36:/home/lxn/* ./

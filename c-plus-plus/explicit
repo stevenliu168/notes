@@ -1,0 +1,12 @@
+C++ explicit关键字详解
+https://blog.csdn.net/guoyunfei123/article/details/89003369
+
+explicit构造函数
+https://www.cnblogs.com/xzxl/p/7755152.html
+
+explicit构造函数
+https://blog.csdn.net/qq_34269988/article/details/88674502
+
+声明时候构造函数前加explicit -防止构造函数参数的隐式转换
+https://blog.csdn.net/ygm_linux/article/details/25369073
+

@@ -1,0 +1,53 @@
+https://www.cnblogs.com/likemao/p/10167318.html
+
+C++中字符串换行（如何拆分为多行）
+在C/C++语言中，可能我们要书写的一个字符串太长了，放在一行上影响代码的可读性。这时我们就需要多行书写了。
+ 
+字符串多行书写有两种规则：
+ 1. 在字符串换行处加一个反斜杠’\’，下一行前不能有空格或者Tab键；
+2. 使用双引号。 
+ 
+程序示例：
+ 
+ #include
+ #include
+ usingnamespace std;
+ int main()
+ {
+     //错误示例下一行前不能有空格
+     charchstr[] = "abcabc\
+                    abcabc";
+     //错误示例'\'要紧挨着换行处的字符
+     charchstr1[] = "abcabc \
+ abcabc";
+     //方法1
+     charchstr2[] = "abcabc\
+ abcabc";
+     //方法2
+     charchstr3[] = "abcabc"
+         "abcabc";
+     printf("chstr[]: %s\n", chstr);
+     printf("chstr1[]: %s\n", chstr1);
+     printf("chstr2[]: %s\n", chstr2);
+     printf("chstr3[]: %s\n", chstr3);
+     string str = "abcabc\
+ abcabc";
+     string str1 = "abcabc"
+         "abcabc";
+     cout << "str:"<< str << endl;
+     cout << "str1:"<< str1 << endl;
+     return0;
+ }
+ 
+ 
+ 
+ 
+ 
+输出结果：
+ chstr[]: abcabc                            abcabc
+ chstr1[]: abcabc        abcabc
+ chstr2[]: abcabcabcabc
+ chstr3[]: abcabcabcabc
+ str:abcabcabcabc
+ str1:abcabcabcabc
+ 请按任意键继续. . .

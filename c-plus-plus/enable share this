@@ -1,0 +1,17 @@
+C++11标准库的一个工具类enable_shared_from_this<T>的作用及原理分析
+https://www.cnblogs.com/jo3yzhu/p/11358400.html
+
+C++智能指针的enable_shared_from_this和shared_from_this机制
+https://blog.csdn.net/QIANGWEIYUAN/article/details/88973735
+
+enable_share_from_this功能介绍
+https://blog.csdn.net/csfreebird/article/details/8282518
+
+enable_shared_from_this类的作用和实现
+https://www.cnblogs.com/yang-wen/p/8573269.html
+
+std::enable_shared_from_this的原理及意义
+https://www.jianshu.com/p/4444923d79bd
+
+关于std::shared_ptr的几个问题
+https://www.jianshu.com/p/34b895c9d2e1

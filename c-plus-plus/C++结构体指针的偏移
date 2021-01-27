@@ -1,0 +1,49 @@
+http://blog.sina.com.cn/s/blog_46106c4e010190g1.html
+
+C++结构体指针的偏移
+
+源码如下：
+#include "stdafx.h"
+#include
+#pragma pack(1)
+
+typedef struct {
+int date;
+float open;
+float close;
+float high;
+float low;
+float volume;
+float opid;
+float settleprice;
+float scale;
+char unused;
+} data_t;
+
+using namespace System;
+
+int main(array ^args)
+{
+char a[1024];
+data_t *p,*p1,*p2;
+p=(data_t*)a;
+std::cout<<p<<std::endl;
+p1=p+sizeof(data_t);
+p2=(data_t*)(((char *)p)+sizeof(data_t));
+p++;
+std::cout<<p1<<std::endl;
+std::cout<<p2<<std::endl;
+std::cout<<p<<std::endl;
+return 0;
+}
+
+输出结果：
+001CEEC8　　－> 指针p值
+001CF421　　－> 指针p1值
+001CEEED   －> 指针p2值
+001CEEED   －> 进行p++操作后的指针p值
+
+结论：
+1)结构体的大小为37 bytes，则sizof(data_t)=37。
+　PS:#pragma pack(1)的作用：调整结构体的边界对齐，让其以一个字节对齐；
+2)当执行p++;时，编译器会产生让p前进sizeof(data_t)步长的代码，相当于p2=(data_t*)(((char *)p)+sizeof(data_t))，而对于p1来说，则相当于p偏移了sizeof(data_t)*sizeof(data_t)。

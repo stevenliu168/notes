@@ -1,0 +1,26 @@
+《深入理解C++11》笔记–右值引用：移动语义和完美转发
+https://blog.csdn.net/WizardtoH/article/details/80718605
+
+【原创】深入理解c++的右值引用
+https://blog.csdn.net/weixin_34291004/article/details/93166172
+
+C++ 11 右值引用的理解
+https://blog.csdn.net/ls871211/article/details/7688718
+
+C++ std::move原理&右值引用存在的必要性
+https://blog.csdn.net/szqsdq/article/details/71598080
+
+c++ 之 std::move 原理实现与用法总结
+https://blog.csdn.net/p942005405/article/details/84644069
+
+c++11为什么要引入右值引用
+https://blog.csdn.net/waxtear/article/details/104199314
+
+C++11中的 std::move 右值引用转换实现原理
+https://blog.csdn.net/quicmous/article/details/99705626
+
+C++的move语义真的没那么可怕啦
+https://blog.csdn.net/gg_18826075157/article/details/71889042
+
+彻底搞懂 c++ 函数参数的 & 和 &&
+https://blog.csdn.net/weixin_38587349/article/details/80891437

@@ -1,0 +1,22 @@
+类的静态成员函数
+https://blog.csdn.net/lms1008611/article/details/81408236
+
+静态成员函数为何不能const
+https://blog.csdn.net/orchidofocean/article/details/80118995
+https://blog.csdn.net/shltsh/article/details/45999801
+https://blog.csdn.net/leigelaile1/article/details/80430162
+https://blog.csdn.net/crazy_programmer_p/article/details/38904581
+https://www.cnblogs.com/myblog-richard/articles/5995040.html
+为什么静态成员函数不能是const（转）
+static在c++中的第五种含义：用static修饰不访问非静态数据成员的类成员函数。这意味着一个静态成员函数只能访问它的参数、类的静态数据成员和全局变量。
+   不能用const的原因：
+     这是C++的规则，const修饰符用于表示函数不能修改成员变量的值，该函数必须是含有this指针的类成员函数，函数调用方式为thiscall，而类中的static函数本质上是全局函数，调用规约是__cdecl或__stdcall,不能用const来修饰它。<span style="line-height:26px">一个静态成员函数访问的值是其参数、静态数据成员和全局变量，而这些数据都不是对象状态的一部分。而对成员函数中使用关键字const是表明：函数不会修改该函数访问的目标对象的数据成员。既然一个静态成员函数根本不访问非静态数据成员，那么就没必要使用const了。</span>
+   什么时候使用静态数据成员和静态函数呢？
+      定义数据成员为静态变量，以表明此全局数据逻辑上属于该类。
+      定义成员函数为静态函数，以表明此全局函数逻辑上属于该类，而且该函数只对静态数据、全局数据或者参数进行操作，而不对非静态数据成员进行操作。
+ 
+   static的第一种含义：修饰全局变量时，表明一个全局变量只对定义在同一文件中的函数可见。
+   static的第二种含义：修饰局部变量时，表明该变量的值不会因为函数终止而丢失。
+   static的第三种含义：修饰函数时，表明该函数只在同一文件中调用。
+   static的第四种含义：修饰类的数据成员，表明对该类所有对象这个数据成员都只有一个实例。即该实例归 所有对象共有。
+   static的第五种含义：修饰类成员函数，如上。

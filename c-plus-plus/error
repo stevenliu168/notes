@@ -1,0 +1,28 @@
+error C2280 'FF(void)' attempting to reference a deleted function
+Visual C++ 中的重大更改
+https://www.cnblogs.com/findumars/p/6253037.html
+编译器错误 C2280
+https://docs.microsoft.com/zh-cn/cpp/error-messages/compiler-errors-1/compiler-error-c2280?view=msvc-160&viewFallbackFrom=vs-2019
+
+error: no member named 'make_unique' in namespace 'std'
+https://blog.csdn.net/jiao_mrswang/article/details/97385323
+
+'this' argument has type 'const ', but function is not marked const
+https://www.jianshu.com/p/139a2ac3a424
+https://blog.csdn.net/llq108/article/details/100785491
+
+error member function 'Cancel' not viable 'this' argument has type 'const
+https://blog.csdn.net/lmb1612977696/article/details/80033764
+https://www.jianshu.com/p/aff60edb2cad
+
+variant field 'init' has a non-trivial default constructor
+https://www.cnblogs.com/every2003/archive/2013/01/06/2847907.html
+https://blog.csdn.net/xiaobai_dashen/article/details/59116050
+
+error 调用私有构造函数
+https://www.cnblogs.com/shiyublog/p/13514963.html
+https://blog.csdn.net/beizhengren/article/details/86579771
+https://www.cnblogs.com/this-543273659/archive/2011/08/02/2125487.html
+https://blog.csdn.net/youtherzhang/article/details/70853447
+https://blog.csdn.net/leo115/article/details/8103416
+https://www.cnblogs.com/luosongchao/p/3381933.html

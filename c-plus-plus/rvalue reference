@@ -1,0 +1,13 @@
+search key:不能将右值引用绑定到左值
+
+C++ 11 左值，右值，左值引用，右值引用，std::move, std::foward
+https://blog.csdn.net/xiaolewennofollow/article/details/52559306
+
+C++11 特性 左值、右值、右值引用(&&)详解
+https://blog.csdn.net/qq_42381849/article/details/90726558
+
+C++11 左值、右值、右值引用详解
+https://blog.csdn.net/hyman_yx/article/details/52044632
+
+左值引用和右值引用
+https://blog.csdn.net/qianyayun19921028/article/details/80875002

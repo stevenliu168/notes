@@ -2,3 +2,14 @@ search key:成员函数加override修饰
 
 C++成员函数修饰词的意义和使用（&， &&， const， override）
 https://blog.csdn.net/qls315/article/details/106849340
+
+search key:override const修饰函数
+
+c++ const在重载overload和覆盖override上使用区别
+https://blog.csdn.net/zjcxhswill/article/details/50640214
+
+C++ 类成员函数的重载(overload)，重写/覆盖(override)，隐藏
+https://blog.csdn.net/qq_26437925/article/details/54933326
+
+区分C++ 重载(overload)，覆盖(Override)和隐藏(hide)的概念
+https://blog.csdn.net/u014712482/article/details/80541313

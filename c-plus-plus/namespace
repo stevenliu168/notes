@@ -1,2 +1,11 @@
 C++匿名命名空间
 https://www.cnblogs.com/youxin/p/4308364.html
+
+C++在命名空间中声明类和成员函数
+https://blog.csdn.net/ningmengccccc/article/details/80791772
+
+Namespace基本知识
+https://blog.csdn.net/snowlyw/article/details/81073453
+
+写自定义namespace时候如何将包含的函数的声明和定义
+https://bbs.51cto.com/thread-878045-1-1.html

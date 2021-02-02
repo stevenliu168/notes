@@ -1,0 +1,10 @@
+search key:static_cast
+
+【C++】强制类型转换-static_cast、dynamic_cast、reinterpret_cast、和const_cast
+https://blog.csdn.net/qq_40416052/article/details/82558451
+
+C++四种类型转换运算符：static_cast、dynamic_cast、const_cast和reinterpret_cast
+https://blog.csdn.net/wildand/article/details/90049606
+
+static_cast和dynamic_cast详解
+https://blog.csdn.net/u014624623/article/details/79837849

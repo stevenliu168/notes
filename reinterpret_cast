@@ -1,0 +1,19 @@
+search key:reinterpret_cast可以用什么代替
+
+C++标准转换运算符reinterpret_cast
+https://www.cnblogs.com/ider/archive/2011/07/30/cpp_cast_operator_part3.html
+
+C++中的static_cast ，reinterpret_cast的用法和区别
+https://blog.csdn.net/u014450222/article/details/81428336
+
+reinterpret_cast、dynamic_cast、static_cast的使用及注意事项
+https://blog.csdn.net/tiandao2009/article/details/79842006
+
+static_cast, dynamic_cast, reinterpret_cast, const_cast区别比较
+https://blog.csdn.net/weixin_30788731/article/details/98111843
+
+static_cast, dynamic_cast和reinterpret_cast的区别和应用
+https://blog.csdn.net/meimeng515/article/details/6902063
+
+static_cast、dynamic_cast、 const_cast、reinpreter_cast-详解
+https://blog.csdn.net/windgs_yf/article/details/88396056

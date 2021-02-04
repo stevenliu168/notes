@@ -1,0 +1,10 @@
+search key:c++ 不允许使用魔鬼数字
+
+（C++编程规范第17条）避免使用”魔数“
+https://www.cnblogs.com/dongerlei/p/5117351.html
+
+程序中的魔鬼数字
+https://blog.csdn.net/weixin_33910137/article/details/85667125
+
+代码中的魔鬼数字
+https://blog.csdn.net/weixin_43595461/article/details/91489590

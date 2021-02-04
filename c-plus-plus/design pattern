@@ -1,0 +1,13 @@
+search key:单例设计模式
+
+1.单例设计模式(懒汉式,饿汉式,枚举式,双重检测锁式,静态内部类式)
+https://blog.csdn.net/u012572955/article/details/47428739
+
+第六章：单利模式，懒汉式，饿汉式以及静态内部类，双重检查
+https://blog.csdn.net/csdnliuxin123524/article/details/80032262
+
+饿汉式单例模式与静态内部类实现的懒汉式单例模式
+https://blog.csdn.net/Sherry198786/article/details/102292854
+
+学习互联网架构第八课（单例和多线程）
+https://blog.csdn.net/u012453843/article/details/73743997#

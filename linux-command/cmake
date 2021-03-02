@@ -1,0 +1,6 @@
+
+  cmake --version
+  cmake
+  cmake --help
+  cmake --help-command list
+  cmake --help-command include

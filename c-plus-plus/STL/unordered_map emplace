@@ -1,3 +1,5 @@
+emplace：只有在容器中没有与被放置的键等价的键时才进行插入，如果该建值已有则不操作
+
 std::unordered_map::emplace
 http://www.cplusplus.com/reference/unordered_map/unordered_map/emplace/
 

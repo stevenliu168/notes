@@ -4,3 +4,29 @@
   cmake --help
   cmake --help-command list
   cmake --help-command include
+
+
+search key:linux cmake CMAKE_CURRENT_LIST_DIR
+
+cmake用法及常用命令总结（全）
+https://www.cnblogs.com/ZY-Dream/p/11232779.html
+
+CMake构建系统的骨架
+https://www.cnblogs.com/dverdon/p/4574221.html
+
+Linux下CMake简明教程
+https://blog.csdn.net/whahu1989/article/details/82078563
+
+search key:cmake target_sources public
+
+学习CMake
+http://guileen.github.io/2021/01/11/learn-cmake/
+
+More Modern CMake
+https://hsf-training.github.io/hsf-training-cmake-webpage/
+
+CMAKE的使用（二）
+https://www.jianshu.com/p/683512c694ac
+
+cmake：target_** 中的 PUBLIC，PRIVATE，INTERFACE
+https://blog.csdn.net/qq_35866736/article/details/107780833

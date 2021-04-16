@@ -1,9 +1,16 @@
+=========================== Start
 https://www.zhihu.com/question/32294027
 Git如何在本地查看远端仓库超前本地提交的日志信息？
+=========================== End
 
+
+=========================== Start
 git查看远程仓库的提交历史，以及强制同步到本地仓库
 https://blog.csdn.net/weixin_39278265/article/details/108919745
+=========================== End
 
+
+=========================== Start
 https://blog.csdn.net/u012830148/article/details/82115770
 git 查看远程仓库的log
 
@@ -27,8 +34,10 @@ songchong@srv-pad-compile5:~/3505/ATS350B$ git branch -a
 远程分支为：remotes/origin/tb_gl5118b_dev_v1.9_ble
 
 查看远程分支log:  git log remotes/origin/tb_gl5118b_dev_v1.9_ble
+=========================== End
 
 
+=========================== Start
 https://blog.csdn.net/wq6ylg08/article/details/89052225
 git查看本地+远程所有分支的全部提交以及关系
 
@@ -47,8 +56,10 @@ git log命令获取我们所有的提交记录，gitk命令可以查看图形化
 
 （2）gitk --all
 是真实的画出本地+远程所有分支的全部提交的树状结构，看起来更全面。强烈推荐以后查看整个项目的所有分支情况，使用这个命令gitk --all。
+=========================== End
 
 
+=========================== Start
 https://www.cnblogs.com/lsgxeva/p/9485874.html
 git log 查看提交记录
 1. git log 查看提交历史记录

@@ -1,0 +1,18 @@
+
+找到所有的引用:   Shift+F12
+查找:   Ctrl+F
+移动到定义处:   F12
+跳转到 symbol（搜索变量或者函数），也可以 Ctrl+Shift+O 直接进入
+根据名字查找 symbol，也可以 Ctrl+T
+在.h与.cpp文件中实现相互转换。.h/.cpp切换，也可以 Alt+O
+
+
+VSCode自定义配色方案
+https://www.cnblogs.com/garvenc/p/vscode_customize_color_theme.html
+
+VS Code 怎么查看方法或类被那些文件引用了？
+https://blog.csdn.net/leeehuu/article/details/103511672
+
+VS Code常用快捷键总结
+https://www.cnblogs.com/schut/p/10461840.html
+

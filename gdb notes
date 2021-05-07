@@ -1,3 +1,6 @@
+ b test_egl.cpp:14
+ 
+ 
 search key:gdb调试
 
 GDB调试方法：查看变量

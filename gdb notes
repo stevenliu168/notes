@@ -1,6 +1,10 @@
- b test_egl.cpp:14
- 
- 
+b test_egl.cpp:14
+backtrace 命令 查看当前的堆栈信息，可使用 backtrace 命令 (缩写形式 bt)。
+gdb中跳入函数的命令是step，相当于Visual Studio中的快捷键F11
+gdb中跳出函数的命令是finish，相当于Visual Studio中的快捷键Shift+F11，函数完整执行后返回
+gdb中还有一个直接返回的命令是return，它会跳过当前函数后面的语句直接返回，返回值可以自定义，紧跟在return命令后面即可
+
+
 search key:gdb调试
 
 GDB调试方法：查看变量
@@ -11,3 +15,11 @@ https://blog.csdn.net/niyaozuozuihao/article/details/91802994
 
 Linux环境下的GDB调试方法
 https://blog.csdn.net/horotororensu/article/details/82256832
+
+search key:gdb 显示调用堆栈
+
+GDB入门教程之查看函数调用堆栈
+https://blog.csdn.net/rudy_yuan/article/details/103759899
+
+gdb调试程序时跳进函数和跳出函数
+https://blog.csdn.net/albertsh/article/details/102855983

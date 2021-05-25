@@ -3,6 +3,7 @@ backtrace 命令 查看当前的堆栈信息，可使用 backtrace 命令 (缩�
 gdb中跳入函数的命令是step，相当于Visual Studio中的快捷键F11
 gdb中跳出函数的命令是finish，相当于Visual Studio中的快捷键Shift+F11，函数完整执行后返回
 gdb中还有一个直接返回的命令是return，它会跳过当前函数后面的语句直接返回，返回值可以自定义，紧跟在return命令后面即可
+continue：当程序被停住，可以用continue命令恢复程序的运行直到程序结束，或下一个断点到来。
 输入命令info break,可以查看当前已经设置的断点
 输入命令break, 再加上函数名称,可以设置该函数的起点为断点
 输入命令delete, 再加上断点编号,可以删除对应编号的断点

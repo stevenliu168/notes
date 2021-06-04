@@ -1,0 +1,24 @@
+查找包含"VmiThread"内容的文件，只显示包含内容的文件名
+grep -r -l "VmiThread"
+grep -r -l "VmiTimerThread"
+
+
+#只在目录中所有的.cpp和.h文件中递归搜索字符""
+grep "VmiTimerThread" . -r --include *.{cpp,h}
+grep "VmiInitialize()" . -r --include *.{cpp,h}
+grep "VmiStart()" . -r --include *.{cpp,h}
+grep "PacketQueue()" . -r --include *.{cpp,h}
+grep "SecToMilliSec" . -r --include *.{cpp,h}
+grep "VmiGLDownStreamThread" . -r --include *.{cpp,h}
+grep "g_captureLimit" . -r --include *.{cpp,h}
+grep "GLint" . -r --include *.{cpp,h}
+grep -rni cloudgamesplatformb100 --include=*.json
+grep -rni VmiDataStream.cpp --include=*.mk
+grep -rni MakeUniqueNoThrow --include=*.cpp
+grep -rni exceptions --include=*.mk
+
+查找包含"VmiThread"内容的文件，显示文件名+内容
+grep -r "VmiThread"
+
+找指定文件的指定字符串
+grep "VmiGLShareMemStream" 20201229.txt

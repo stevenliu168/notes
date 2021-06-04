@@ -1,0 +1,7 @@
+du：查询文件或文件夹的磁盘使用空间
+du -sh *
+du -sh /app/*
+du -h --max-depth=1 .
+du -h --max-depth=1 ./newdisk2
+du -h --max-depth=1 ./newdisk
+du -h --max-depth=1 --exclude="newdisk"

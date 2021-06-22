@@ -1,0 +1,34 @@
+1、本地clone fork库代码，br_kunpeng_arm64_native_instruction表示分支，如果是默认分支，也可以不用写分支名。（如已下载fork库代码可直接跳过此步）
+
+git clone ssh://git@codehub-dg-g.huawei.com:2222/zKF64284/Codehub_Peixun_0204.git -b br_kunpeng_arm64_native_instruction
+
+cd Codehub_Peixun_0204/
+
+
+
+2、添加主库地址到本地，upstream是给主库起的别名
+
+git remote add upstream ssh://git@codehub-dg-g.huawei.com:2222/CodeHub_zhm/Sample/Codehub_Peixun_0204.git
+
+
+
+3、拉取主库到本地，upstream是主库别名
+
+git fetch upstream -v
+
+
+
+4、回退本地代码与主库保持一致，upstream/br_kunpeng_arm64_native_instruction表示回退到主库的br_kunpeng_arm64_native_instruction分支，
+
+如果回退后，本地原来有修改的代码还想保留在本地，记得是用--mixed参数
+
+如果回退后，本地原来有修改的代码完全不需要了，记得是用--hard参数
+
+git reset --mixed upstream/br_kunpeng_arm64_native_instruction
+或
+git reset --hard upstream/br_kunpeng_arm64_native_instruction
+
+
+5、强制push代码到fork库，origin表示是自己的fork库，br_kunpeng_arm64_native_instruction表示分支名
+
+git push origin br_kunpeng_arm64_native_instruction -f

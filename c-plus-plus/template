@@ -1,2 +1,8 @@
 模板显式、隐式实例化和（偏）特化、具体化的详细分析
 https://blog.csdn.net/chenyiming_1990/article/details/10526371
+
+C++ template的一些高级用法（元编码，可变参数，仿函数，using使用方法,. C++ 智能指针）
+https://blog.csdn.net/zdy0_2004/article/details/44837407
+
+c – 可变参数模板的部分模板特化,其中[Args …]为空
+http://www.voidcn.com/article/p-grxujxry-bwb.html

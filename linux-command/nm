@@ -1,0 +1,3 @@
+nm -D libInstructionEngine.so | grep VmiGlActiveTexture
+
+nm -D libInstructionEngine.so >> 1.txt

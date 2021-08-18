@@ -6,6 +6,10 @@
 根据名字查找 symbol，也可以 Ctrl+T
 在.h与.cpp文件中实现相互转换。.h/.cpp切换，也可以 Alt+O
 
+search key:vscode 转成大写
+
+VSCode设置大小写转换的快捷键
+https://www.cnblogs.com/sufaith/p/vscode-key-text-transform-case.html
 
 VSCode自定义配色方案
 https://www.cnblogs.com/garvenc/p/vscode_customize_color_theme.html

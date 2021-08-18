@@ -1,3 +1,7 @@
+error: cannot assign to non-static data member within const member function
+C++核心——类中的const关键字
+https://blog.csdn.net/wtzhu_13/article/details/105471200
+
 error C2280 'FF(void)' attempting to reference a deleted function
 Visual C++ 中的重大更改
 https://www.cnblogs.com/findumars/p/6253037.html

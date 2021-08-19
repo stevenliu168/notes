@@ -1,0 +1,212 @@
+git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/VmiInstructionDebugger.git
+git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/ARMNativeGame.git
+git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/ArmNativeDoc.git
+git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/CloudGameTest.git
+git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/cloudgame_refactor.git
+
+
+设置git用户名和电子邮件
+git config --global user.email “liuxiaoning2@hisilicon.com”
+git config --global user.name “liuxiaoning”
+（访问https://codehub-y.huawei.com/workspace设置）
+
+git config --global user.email “lwx5331003@huawei.com”
+git config --global user.name “liuxiaoning”
+（访问ARMNative主干代码设置）
+
+查看所有的配置信息
+git config -l
+
+下载VMI_Cloud.git代码
+git clone ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git
+
+查看远程仓库:
+git remote -v
+
+查看本地仓库的分支
+git branch
+
+查看本地和远程仓库的所有分支
+git branch -a
+
+查看远程仓库的分支
+git branch -r
+
+查看所有文件具体被修改的地方
+git diff 
+
+查看VmiGLPipe.cpp文件被修改的地方(相对路径)
+git diff  ./src/InstructionStream/opengl/VmiGLPipe.cpp
+或git diff  src/InstructionStream/opengl/VmiGLPipe.cpp
+
+查看VmiGLPipe.cpp文件被修改的地方(绝对路径)
+git diff /d/Git/codehub-y/VMI_Cloud/src/InstructionStream/opengl/VmiGLPipe.cpp
+
+把修改的内容添加到本地git缓存区中
+git add src/InstructionStream/opengl/VmiGLPipe.cpp
+
+推送修改到本地git库中
+git commit -m "FixBot一键格式化"
+
+取回远程主机origin仓master分支的更新，再与本地的指定分支合并
+git pull origin master
+
+把当前提交到git本地仓库的代码推送到远程主机的origin仓的master分支上
+git push origin master
+
+
+
+
+
+
+
+
+git add src/AndroidService/sharemem/VmiShareMem.cpp
+git add src/AndroidService/sharemem/VmiShareMem.h
+git add .
+git commit -m "对VmiShareMem文件进行FixBot一键格式化"
+
+
+git reset到某一次commit
+git reset --soft 46d51c3fc9989652c98732121c52d87d472aa379
+
+
+
+
+
+
+
+
+丢弃工作区的修改(没有git add到缓冲区)
+$ git checkout -- ../SIPC/SipcSharedMemService.cpp
+$ git checkout -- ../SIPC/ISipcSharedMem.h
+
+
+git add .
+git commit -m "对BnSipcSharedMem,BpSipcSharedMem进行格式化修复"
+git push
+
+
+git remote add lWX5331003 ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git
+git pull lWX5331003 master
+【需求合入】SR20200429897987 对BnSipcSharedMem,BpSipcSharedMem进行格式化修复
+
+
+
+
+git add .
+git commit -m "对ISipcSharedMem,SipcController,SipcMsgQ进行格式化修复"
+git push
+
+
+git add .
+git commit -m "需求合入】SR20200429897987 对ISipcSharedMem,SipcController,SipcMsgQ进行格式化修复"
+git push
+
+
+git add .
+git commit -m "【需求合入】SR20200429897987 对SipcQueue进行格式化修复"
+git push
+
+
+git checkout -- utils.h
+git add .
+git commit -m "【需求合入】SR20200429897987 对SipcQueueBase,SipcQueueLocal进行格式化修复"
+git push
+git pull lWX5331003 master
+编译
+合并
+
+
+git checkout -- utils.h
+git add .
+git commit -m "【需求合入】SR20200429897987 对SipcSharedMemClient进行格式化修复"
+git push origin master:dev
+git commit -m "【需求合入】SR20200429897987 对SipcSharedMemService进行格式化修复"
+
+
+
+
+
+
+
+
+
+git remote remove lWX5331003
+git fetch --all
+git checkout -b dev origin/dev
+git checkout -b master origin/master
+
+
+*********************撤销提交到暂存区的更改************************************************************************************
+修改文件
+git status      【由于工作区文件被修改了，所以显示为红色】
+
+git add .        
+git status   【由于文件被添加到了暂存区，等待提交，所以显示为绿色】
+
+git reset HEAD .  或者git reset HEAD file
+git status     【由于使用"git reset HEAD ."又撤销了前面所做的所有的add操作，所以这里又恢复到红色】
+
+git checkout .   或者git checkout -- file 【撤销对工作区所做的一切更改，这样以前所有的修改就都没有，慎用！】
+**********************************************************************************************************************************
+
+
+*********************git clone远程代码出错************************************************************************************
+$ git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/ArmNativeDoc.git
+Cloning into 'ArmNativeDoc'...
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+解决办法：拷贝C:\Users\lwx5331003\.ssh\id_rsa.pub文件的内容，加到项目的SSH Keys里面
+**********************************************************************************************************************************
+
+
+
+
+**************************git reset出错********************************************************************************************************
+错误场景：
+$ git reset --hard Kunpeng-Computing-Media-VMI_Cloud/master
+fatal: ambiguous argument 'Kunpeng-Computing-Media-VMI_Cloud/master': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+解决方式：git fetch --all
+***********************************************************************************************************************************************
+
+
+
+
+**********************************************************************************************************************************
+git reset --soft A你会看到B和C的东西是绿色的（上演并准备提交）
+git reset --mixed A （或git reset A ），你会看到B和C的东西是红色的（未分阶段，准备上演（绿色），然后提交）
+git reset --hard A你将不会再看到B和C的变化（就好像它们从未存在过）
+**********************************************************************************************************************************
+
+
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git
+
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git
+git remote set-url origin ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git
+
+ git log -- VmiGLESv2Decoder.cpp        //过滤提交记录，只查看该文件的提交记录
+ git log -p VmiGLESv2Decoder.cpp       //过滤提交记录，并且能查看每次提交记录中，对该文件的修改
+
+git grep -n 'VmiSocketAgent' -- *.cpp
+git grep -n 'VmiSocketAgent'
+
+//查看git grep命令的帮助
+//C:\Program Files\Git\mingw64\share\doc\git-doc\git-grep.html
+git grep --help
+
+//git如何查看某个人提交的日志
+git log --author="lwx5331003"
+
+
+git reset --hard upstream/br_kunpeng_arm64_native_instruction
+git cherry-pick 2d78dfc44c4f944ab19582ca7c5f418fe0d9237d^C

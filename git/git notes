@@ -1,3 +1,8 @@
+git clone tag 指定下载后的目录名
+git clone -b android-9.0.0_r60 ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Native/VMI/goldfish-opengl.git android-9.0.0_r60
+
+
+
 git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/VmiInstructionDebugger.git
 git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/ARMNativeGame.git
 git clone ssh://git@isource-dg.huawei.com:2222/HiSiliconVMI/ArmNativeDoc.git
@@ -53,8 +58,6 @@ git pull origin master
 
 把当前提交到git本地仓库的代码推送到远程主机的origin仓的master分支上
 git push origin master
-
-
 
 
 git add src/AndroidService/sharemem/VmiShareMem.cpp

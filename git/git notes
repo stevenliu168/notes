@@ -57,10 +57,6 @@ git push origin master
 
 
 
-
-
-
-
 git add src/AndroidService/sharemem/VmiShareMem.cpp
 git add src/AndroidService/sharemem/VmiShareMem.h
 git add .
@@ -69,12 +65,6 @@ git commit -m "对VmiShareMem文件进行FixBot一键格式化"
 
 git reset到某一次commit
 git reset --soft 46d51c3fc9989652c98732121c52d87d472aa379
-
-
-
-
-
-
 
 
 丢弃工作区的修改(没有git add到缓冲区)
@@ -89,8 +79,6 @@ git push
 
 git remote add lWX5331003 ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git
 git pull lWX5331003 master
-【需求合入】SR20200429897987 对BnSipcSharedMem,BpSipcSharedMem进行格式化修复
-
 
 
 
@@ -123,13 +111,6 @@ git add .
 git commit -m "【需求合入】SR20200429897987 对SipcSharedMemClient进行格式化修复"
 git push origin master:dev
 git commit -m "【需求合入】SR20200429897987 对SipcSharedMemService进行格式化修复"
-
-
-
-
-
-
-
 
 
 git remote remove lWX5331003

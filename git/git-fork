@@ -1,0 +1,136 @@
+git 仓库fork 操作总结
+1 首先选择一个需要fork的仓库
+2 进行fork操作
+3 将fork后的地址clone到本地
+4 打开终端，cd到clone本地的根目录下
+5 添加upstream  命令：git remote add upstream 【git地址】
+6 查询upstream的分支是否加入成功 ：git remote -v 随后会显示查询后的结果
+7 更新某个分支：git pull upstream 【分支】
+8 内容更新到本地：将分支上传上去
+
+
+fork源仓库ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git到个人名下ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git。
+fork源仓库ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git到个人名下ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git。
+fork源仓库ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git到个人名下ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git。
+
+
+
+
+git clone ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git
+git clone ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git
+git clone ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git
+
+
+git remote add Kunpeng-Computing-Media-VMI_libs ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git
+git remote add Kunpeng-Computing-Media-VMI_Client ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git
+git remote add Kunpeng-Computing-Media-VMI_Cloud ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git
+
+
+//本地机的git目录状况
+$ git remote -v
+Kunpeng-Computing-Media-VMI_libs        ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git (fetch)
+Kunpeng-Computing-Media-VMI_libs        ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git (push)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git (push)
+
+$ git remote -v
+Kunpeng-Computing-Media-VMI_Cloud       ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git (fetch)
+Kunpeng-Computing-Media-VMI_Cloud       ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git (push)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git (push)
+
+$ git remote -v
+Kunpeng-Computing-Media-VMI_Client      ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git (fetch)
+Kunpeng-Computing-Media-VMI_Client      ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git (push)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git (push)
+
+
+//编译机的git目录状况
+lxn@ubuntu:/home/newdisk2/lxn/ARMNativeReop/VMI_Cloud$ git remote -v
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Cloud.git (push)
+
+lxn@ubuntu:/home/newdisk2/lxn/ARMNativeReop/VMI_Client$ git remote -v
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_Client.git (push)
+
+lxn@ubuntu:/home/newdisk2/lxn/ARMNativeReop/VMI_libs$ git remote -v
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git (fetch)
+origin  ssh://git@codehub-dg-y.huawei.com:2222/lWX5331003/VMI_libs.git (push)
+
+
+
+
+//当前分支是本地lWX5331003仓库的master分支，将远程仓库Kunpeng-Computing-Media-VMI_Client的matster分支的代码
+//完全覆盖lWX5331003仓库的dev分支。
+首先切换到本地lWX5331003仓库的master分支。
+ git reset --hard Kunpeng-Computing-Media-VMI_libs/master
+ git pull Kunpeng-Computing-Media-VMI_libs master
+ git push origin master:dev
+
+ git reset --hard Kunpeng-Computing-Media-VMI_Client/master
+ git pull Kunpeng-Computing-Media-VMI_Client master
+ git push origin master:dev
+
+ git reset --hard Kunpeng-Computing-Media-VMI_Cloud/master
+ git pull Kunpeng-Computing-Media-VMI_Cloud master
+ git push origin master:dev
+
+
+
+
+
+
+
+//为何要在WX5331003仓库下建dev分支，因为WX5331003远程仓库master分支无法修改，一旦push的代码有误，只能通过删除WX5331003仓库重新fork恢复
+//remote: GitLab: You are not allowed to force push code to a protected branch on this project.
+*****************************************************************************************************************
+一、在本地机操作
+1. git checkout master                                //切换到master分支
+2. git pull origin master                              //拉取liuxiaoning WX5331003/VMI_libs的分支master
+3. git pull Kunpeng-Computing-Media-VMI_libs master //拉取Kunpeng-Computing-Media/Media/VMI_libs的分支master
+4. 修改代码
+5. git add .        
+6. git commit -m "【需求合入】SR20200429897987 对utils,VmiStream进行格式化修复"
+7. git push origin master:dev                      //提交本地master分支到liuxiaoning WX5331003/VMI_libs的分支dev
+
+二、在编译机上操作
+git checkout dev                                       //切换到dev分支
+git pull origin dev                                     //拉取liuxiaoning WX5331003/VMI_libs的分支dev
+编译
+编译通过，接着第三步
+编译没通过，撤销编译机本地的修改
+git checkout dev
+git reset --hard HEAD^
+git push origin dev:dev --force
+回到本地机撤销已经push到远端的commit，操作如下：
+git checkout master
+git reset --mix HEAD^
+//已通过编译机撤销并push，可以不用git push origin master:dev --force再更新远端dev分支了
+
+三、在本地机操作
+git branch                                            //查看当前分支，确保在master分支下
+git push origin master:master              //提交本地master分支到liuxiaoning WX5331003/VMI_libs的分支master
+
+四、在编译机上操作
+git checkout master                             //切换到master分支
+git pull origin master                           //拉取liuxiaoning WX5331003/VMI_libs的分支master
+编译
+
+五、在https://codehub-y.huawei.com/workspace操作
+创建合并请求
+****************************************************************************************************************
+
+
+
+
+
+git clone ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Cloud.git
+git clone ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_Client.git
+git clone ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Media-Card/VMI_libs.git
+
+
+git remote rm Kunpeng-Computing-Media-VMI_libs
+git remote rm Kunpeng-Computing-Media-VMI_Client
+git remote rm Kunpeng-Computing-Media-VMI_Cloud

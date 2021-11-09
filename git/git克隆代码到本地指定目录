@@ -12,4 +12,6 @@ https://www.cnblogs.com/zhoupeng-php/p/11911818.html
 Git克隆指定分支、指定目录
 git clone -b 分之名 http的git地址
 git clone -b 分之名 http的git地址 c:/User/zp/dev指定目录
+
+Git克隆指定分支br_release_media_rc3_poc，到指定目录./gamebox_php_ceshi
 git clone -b br_release_media_rc3_poc ssh://git@codehub-dg-y.huawei.com:2222/Kunpeng-Computing-Media/Native/VMI/VMIEngine.git ./gamebox_php_ceshi

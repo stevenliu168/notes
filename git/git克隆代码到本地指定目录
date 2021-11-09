@@ -5,3 +5,10 @@ git克隆代码到本地指定目录
 输入下面命令即可克隆代码到www下面的gamebox_php_ceshi目录里面
 
 $ git clone git@192.168.0.180:gamebox/gamebox_php.git ./gamebox_php_ceshi
+
+
+
+https://www.cnblogs.com/zhoupeng-php/p/11911818.html
+Git克隆指定分支、指定目录
+git clone -b 分之名 http的git地址
+git clone -b 分之名 http的git地址 c:/User/zp/dev指定目录

@@ -1,0 +1,8 @@
+search key:git checkout 加-b和不加-b
+
+https://www.cnblogs.com/yanshaoxiong/p/12201353.html
+git checkout和$ git checkout -b的区别是什么
+$ git checkout  切换到某分支；例如  $ git checkout master  切换到主分支
+$ git checkout -b 新建并切换到新建的分支上；例如 $git checkout -b newbranch 
+
+https://www.cnblogs.com/hutaoer/archive/2013/05/07/git_checkout.html

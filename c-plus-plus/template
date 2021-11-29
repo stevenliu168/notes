@@ -6,3 +6,8 @@ https://blog.csdn.net/zdy0_2004/article/details/44837407
 
 c – 可变参数模板的部分模板特化,其中[Args …]为空
 http://www.voidcn.com/article/p-grxujxry-bwb.html
+
+search key:c++ 模板函数 T head, Args... args
+
+泛化之美--C++11可变模版参数的妙用 
+https://www.cnblogs.com/qicosmos/p/4325949.html

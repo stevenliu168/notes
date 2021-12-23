@@ -13,3 +13,10 @@ tar zcf /root/temp/temp2/1.tar.gz *
 tar zxf /root/temp/temp2/1.tar.gz
 即可。
 
+
+https://blog.csdn.net/weixin_39554290/article/details/116956222
+linux解压后缀为.xz,xz后缀名文件解压方法
+后缀名为xz的这种文件是使用tar打包后再压缩生成的。解压方法是：
+1、xz -d **.tar.xz
+2、tar -xvf **.tar
+如没有按照xz工具，则首先需要下载、安装xz工具：

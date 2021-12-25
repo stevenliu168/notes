@@ -8,3 +8,16 @@ whereis google-chrome
 的结果，可以看到google-chrome安装在这些目录里，如果你没有安装要查找的软件，则不会显示文件路径出来。
 当然还有：
 find / -name filename,直接找的整个硬盘
+
+https://blog.csdn.net/liufuchun111/article/details/80402109
+linux下查看软件安装路径
+1. whereis gcc：查看gcc安装路径；
+2. which    gcc：查看gcc运行路径
+3. rpm包:
+    3.1 rpm -ql gcc: 查看gcc相关文件的安装路径。
+    3.2 rpm -qa | grep gcc: 查看有没有安装gcc。
+    3.3 rpm -qa : 查看全部使用rpm安装的软件。
+4. deb包:
+    4.1 dpkg -L gcc: 查看gcc相关文件的安装路径。
+    4.2 dpkg -l | grep gcc ； 查看有没有安装gcc.
+    4.3 dpkg -l: 查看全部安装包。

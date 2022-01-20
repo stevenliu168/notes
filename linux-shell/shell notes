@@ -8,16 +8,19 @@ https://blog.csdn.net/BoomLee/article/details/82348256
 
 linux shell计算毫秒间隔
 https://blog.csdn.net/bowenlaw/article/details/103789158
+_______________________________________________________________
 
 search key:linux source bash
 
 linux里source、sh、bash、./有什么区别
 https://www.cnblogs.com/pcat/p/5467188.html
+_______________________________________________________________
 
 search key:shell 分号的作用
 
 https://www.cnblogs.com/EasonJim/p/8315896.html
 Shell脚本中的分号使用
+_______________________________________________________________
 
 search key:shell 比较带小数点的数
 
@@ -29,8 +32,25 @@ https://www.cnblogs.com/paul8339/p/11983901.html
 
 shell 中浮点数和整数的比较
 https://blog.51cto.com/gavinshaw/776180
+_______________________________________________________________
 
 search key:ubuntu shell if语句
 
 【linux】shell中if语句的使用
 https://www.cnblogs.com/triple-y/p/11640972.html?ivk_sa=1024320u
+_______________________________________________________________
+
+search key:shell 数组
+
+Shell中的数组及其相关操作
+https://www.cnblogs.com/mydriverc/p/8302841.html
+_______________________________________________________________
+
+search key:shell []
+
+shell中的(),(()),{},=,==,[],[[]]几种语法用法
+https://blog.csdn.net/Michaelwubo/article/details/81698307
+
+shell脚本中的[]/[[]]区别
+https://www.cnblogs.com/lit10050528/p/4915001.html
+_______________________________________________________________

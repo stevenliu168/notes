@@ -19,6 +19,9 @@ grep -rni exceptions --include=*.mk
 grep "IRenderControlEncoder" . -r --include=*.{cpp,h}
 grep "IRenderControlEncoder" . -r --include="*cpp"
 grep "IRenderControlEncoder" . -r --include="*h"
+grep "HostConnection::get()" . -r --include=*.{cpp,h}
+grep "gl2Encoder()" . -r --include=*.{cpp,h}
+
 
 查找包含"VmiThread"内容的文件，显示文件名+内容
 grep -r "VmiThread"

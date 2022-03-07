@@ -13,3 +13,19 @@ lxn@ubuntu:~/.pip$ python -m pip install regex
 
 查看python安装的模块
 lxn@ubuntu:~/.pip$ pip list
+
+
+search key:ImportError: No module named mako.template
+
+编译错误问题解决：No module named mako.template
+failed make: *** [ninja_wrapper] Error 1 解决方案：安装mako模块即可 $ sudo apt-get install python-mako,
+
+http://3ms.huawei.com/km/blogs/details/10883261
+【环境配置】repo /usr/bin/env: ‘python’: No such file or directory
+切换最新的计算云，repo环境问题：
+ubuntu自带了python3.X版。但是当前repo对python3.X兼容不好，建议使用python2.7。下面我们开始安装python2.7。
+（1）安装python2.7
+apt-get install python2.7
+（2）手动创建python软连接指向python2.7，使得python命令默认使用2.7版本
+cd /usr/bin/
+ln -s python2.7 python

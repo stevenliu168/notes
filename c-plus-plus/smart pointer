@@ -1,3 +1,8 @@
+make_unique 数组创建
+https://docs.microsoft.com/zh-cn/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-170
+https://docs.microsoft.com/zh-cn/cpp/standard-library/memory-functions?view=msvc-170#make_unique
+
+
 智能指针 release get
 https://blog.csdn.net/u011624903/article/details/109566645
 

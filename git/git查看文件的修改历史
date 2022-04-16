@@ -1,0 +1,175 @@
+https://blog.csdn.net/qq_37475168/article/details/119850550
+git命令行查看某个文件的修改历史
+
+背景
+有时在AS中右击文件行号左侧空白处查看修改历史，但此时Annotate是灰色的，这时就需要用git命令进行查看了
+
+方法
+假设要查看的文件是build.gradle，则对应的命令就为
+
+➜  first git:(szc) git log -p build.gradle
+结果如下图所示
+
+
+
+输出内容持久化
+我们可以把结果重定向到一个文件中，这样查看起来更方便
+
+➜  first git:(szc) git log -p build.gradle > ../output.txt
+ cat一下输出文件即可
+
+➜  first git:(szc) cat ../output.txt
+commit f524eeda210b6d2e92dcd43dc13f1831d5bcf94c
+Author: songzeceng <392004248@qq.com>
+Date:   Thu Dec 12 21:08:09 2019 +0800
+ 
+ 
+    KeyStore加解密
+ 
+ 
+diff --git a/build.gradle b/build.gradle
+index 8f91621..20ea27a 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -7,7 +7,7 @@ buildscript {
+         jcenter()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:3.5.2'
++        classpath 'com.android.tools.build:gradle:3.5.3'
+//        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+         // protobuf插件，AS3.0需要protobuf版本在0.8.2及以上
+ 
+ 
+ 
+ 
+commit 282b486ac2fa2df7edb0c9ebabc47b6491b32634
+Author: songzeceng <392004248@qq.com>
+Date:   Wed Nov 27 10:08:59 2019 +0800
+ 
+ 
+    去掉protobuf依赖
+ 
+ 
+diff --git a/build.gradle b/build.gradle
+index 0a39454..8f91621 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -7,8 +7,8 @@ buildscript {
+         jcenter()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:3.0.1'
+-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.2'
++        classpath 'com.android.tools.build:gradle:3.5.2'
++//        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+         // protobuf插件，AS3.0需要protobuf版本在0.8.2及以上
+ 
+ 
+         //compile 'com.android.support:appcompat-v7:26.0.0'
+ 
+ 
+commit f3f13da57e62c63b374de48bd991173b28165fc2
+Author: songzeceng <songzeceng@360buyad.local>
+Date:   Fri Feb 15 14:04:45 2019 +0800
+ 
+ 
+    protobuf的使用
+ 
+ 
+diff --git a/build.gradle b/build.gradle
+index 02a3812..0a39454 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -8,6 +8,9 @@ buildscript {
+     }
+     dependencies {
+         classpath 'com.android.tools.build:gradle:3.0.1'
++        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.2'
++        // protobuf插件，AS3.0需要protobuf版本在0.8.2及以上
++
+         //compile 'com.android.support:appcompat-v7:26.0.0'
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+ 
+ 
+commit 0a4138cb58576c84cc266b25c239c71b9cd1ab7f
+Author: Song zeceng <songzeceng@bytedance.com>
+Date:   Sun Feb 11 11:10:21 2018 +0800
+ 
+ 
+    2018/02/11
+ 
+ 
+diff --git a/build.gradle b/build.gradle
+new file mode 100644
+index 0000000..02a3812
+--- /dev/null
++++ b/build.gradle
+@@ -0,0 +1,29 @@
++// Top-level build file where you can add configuration options common to all sub-projects/modules.
++
++buildscript {
++
++    repositories {
++        google()
++        jcenter()
++    }
++    dependencies {
++        classpath 'com.android.tools.build:gradle:3.0.1'
++        //compile 'com.android.support:appcompat-v7:26.0.0'
++        // NOTE: Do not place your application dependencies here; they belong
++        // in the individual module build.gradle files
++    }
++}
++
++allprojects {
++    repositories {
++        google()
++        jcenter()
++        maven {
++            url "https://maven.google.com"
++        }
++    }
++}
++
++task clean(type: Delete) {
++    delete rootProject.buildDir
++}
+输出内容解析
+从上往下是从新到旧的每个提交信息，每一个提交信息的格式都是
+
+commit commitID
+Author: 作者名 <作者邮箱>
+Date:   提交时间，星期 月 日 时:分:秒 年 时区
+ 
+ 
+    提交信息
+ 
+ 
+diff --git a/提交前当前文件相对路径 b/提交后当前文件相对路径
+提交索引
+对源文件1的修改信息
+举个例子：
+
+commit f524eeda210b6d2e92dcd43dc13f1831d5bcf94c
+Author: songzeceng <392004248@qq.com>
+Date:   Thu Dec 12 21:08:09 2019 +0800
+ 
+ 
+    KeyStore加解密
+ 
+ 
+diff --git a/build.gradle b/build.gradle
+index 8f91621..20ea27a 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -7,7 +7,7 @@ buildscript {
+         jcenter()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:3.5.2'
++        classpath 'com.android.tools.build:gradle:3.5.3'
+//        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+         // protobuf插件，AS3.0需要protobuf版本在0.8.2及以上
+以上提交信息表示我在19年12月12号晚上9:08发起了一个提交，build/gradle的提交内容就是修改了下com.android.tools.build:gradle的版本(3.5.2->3.5.3)

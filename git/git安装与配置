@@ -1,0 +1,67 @@
+一 . 软件安装
+1. 软件准备
+1、Git客户端，从官网下载：https://git-scm.com/
+如：Git-2.12.0-64-bit.exe
+2、TortoiseGit客户端，从官网下载：https://tortoisegit.org/
+如：TortoiseGit-2.2.0.0-64bit.msi
+TortoiseGit-LanguagePack-2.2.0.0-64bit-zh_CN.msi
+（如果不能访问外网，请从rtools或者vdesk下载）
+2. 软件安装
+1、安装Git客户端，安装选项基本保持默认。
+ 
+ 
+ 
+ 
+ 
+点击“Install”完成安装。
+2、安装TortoiseGit客户端。
+选择安装所有组件：
+ 
+点击“Install”进行安装。
+3. 软件配置
+1、配置中文支持
+软件安装完成之后，安装中文语言包。
+设置中文：安装完成之后，在“TortoiseGit - Settings - General”中设置为中文。
+2、设置使用ssh.exe：
+在“TortoiseGit - 设置 - 网络 - SSH”中设置使用ssh.exe。选择git中自带的ssh.exe.
+ 
+3、导入模板
+ 
+在“TortoiseGit - 设置 - Git ”，点击“Edit global .gitConfig”
+ 
+在弹出的记事本中添加以下内容，其中template=填写实际模板的路径和名称。
+[commit]
+template = E:/message.template
+
+ 
+4、配置全局用户名及邮箱
+（1）在开始菜单中选择Git Bash，输入以下命令配置用户名和邮箱
+$ git config --global user.name "yourname"
+$ git config --global user.email "yourmail@huawei.com"
+yourname：用户名是你的域账号名，如l88888888
+youremail：邮箱为你的邮箱，如test@huawei.com
+Tips：必须要设置用户名及邮箱后才能使用Git，Git通过检测用户名和邮箱来跟踪进行commit的用户,在每次提交代码时这些信息将会附加在提交信息当中。
+（2）配置禁止换行符自动转换（问题影响参考：https://github.com/cssmagic/blog/issues/22）
+git config --global core.autocrlf false
+（2）检查配置
+可以使用如下命令检查配置是否正确：
+$ git config --list
+4、配置 SSH Key
+公钥是Gerrit识别用户身份的一种认证方式，通过公钥，您可以将本地git仓库与CodeClub仓库建立联系，进行上传/下载代码。
+（1）生成公钥
+使用你的邮箱生成SSH Key（Windows下需在Git Bash中输入）
+$ ssh-keygen -t rsa -C "youremail@huawei.com"
+回车后会依此询问你ssh_key文件保存的位置以及密码，这里均使用默认即可。直接一路按回车。
+$ ssh-keygen -t rsa -C "youremail@huawei.com"
+# Creates a new ssh key, using the provided email as a label
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/you/.ssh/id_rsa): [Press enter]
+Enter passphrase (empty for no passphrase): [Type a passphrase]
+Enter same passphrase again: [Type passphrase again]
+顺利完成后会看到如下提示：
+Your identification has been saved in /c/Users/you/.ssh/id_rsa.
+Your public key has been saved in /c/Users/you/.ssh/id_rsa.pub.
+The key fingerprint is:
+01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db youremail@huawei.com
+该命令会在用户主目录（在这里即为/c/Users/you/）里生产.ssh文件夹，里面有id_rsa和id_rad.pub两个文件，这两个文件就是SSH Key的秘钥对。其中，id_rad是私钥，不能泄露，id_rsa.pub是公钥，可以告诉别人。

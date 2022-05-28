@@ -1,0 +1,5 @@
+一、命令简介
+  LDD用来打印或者查看程序运行所需的共享库,常用来解决程序因缺少某个库文件而不能运行的一些问题。ldd不是一个可执行程序，而只是一个shell脚本。
+  
+  ldd GlobalCache
+  ldd GlobalCache |grep protobuf

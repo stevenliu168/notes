@@ -1,1 +1,4 @@
-chown -R lxn:lxn./ARMNative
+chown -R lxn:lxn ./ARMNative
+
+将GlobalCache文件设置为globalcache组的globaacache用户拥有
+chown globalcache:globalcache GlobalCache

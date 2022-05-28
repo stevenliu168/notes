@@ -1,1 +1,1 @@
-chown 
+chown -R lxn:lxn./ARMNative

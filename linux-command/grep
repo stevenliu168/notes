@@ -28,3 +28,14 @@ grep -r "VmiThread"
 
 找指定文件的指定字符串
 grep "VmiGLShareMemStream" 20201229.txt
+
+https://blog.csdn.net/sunkun2013/article/details/76060742
+Linux下使用grep 进行全匹配匹配
+grep 精确匹配
+如果是有进程名为abcd, abcde，abc等有包含”abc”字符的
+
+模糊匹配
+$ grep "abc"   # 结果为abcd, abcde, abc等
+
+全匹配
+$ grep -w "abc" # 结果为abc

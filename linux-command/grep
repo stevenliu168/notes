@@ -41,3 +41,7 @@ $ grep -w "abc" # 结果为abc
 search key:grep 看前面的内容
 https://blog.csdn.net/boonion/article/details/121148227
 Linux用grep匹配多个关键词，并显示前几行或者后面几行的内容
+
+search key:指定文件里面查找
+https://www.cnblogs.com/hls-code/p/16148488.html
+Linux操作系统中对文件内容中的指定关键字进行查找（grep命令）

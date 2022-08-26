@@ -33,9 +33,11 @@ https://blog.csdn.net/sunkun2013/article/details/76060742
 Linux下使用grep 进行全匹配匹配
 grep 精确匹配
 如果是有进程名为abcd, abcde，abc等有包含”abc”字符的
-
 模糊匹配
 $ grep "abc"   # 结果为abcd, abcde, abc等
-
 全匹配
 $ grep -w "abc" # 结果为abc
+
+search key:grep 看前面的内容
+https://blog.csdn.net/boonion/article/details/121148227
+Linux用grep匹配多个关键词，并显示前几行或者后面几行的内容

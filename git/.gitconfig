@@ -1,0 +1,9 @@
+[user]
+	email = liuxiaoning2@hisilicon.com
+	name = lwx5331003
+[include]
+	path = C:/Users/lwx5331003/.git-mm/gitconfig
+[core]
+	autocrlf = false
+[commit]
+	template = ~/.gitmsg_sh

@@ -1,3 +1,6 @@
+git问题单号/git commit模板（新建 个目录，保存这个，将.gitconfig，.gitmsg_sh放到一个目录）
+
+
 # notes
 notes
 

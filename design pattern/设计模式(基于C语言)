@@ -1,0 +1,584 @@
+《C++ STL应用指导》课程
+——固网BU“软件人员能力提升”课程系列
+课程承接部门：U2000
+课程开发者：冷波/00109126
+目录
+	什么是设计模式
+	C语言如何实践设计模式？
+	C语言之于OO
+	设计模式案例123
+	附录
+什么是设计模式？
+
+“设计模式”的定义是这样的：A design pattern in architecture and computer science is a formal way of documenting a solution to a design problem in a particular field of expertise. 
+
+   尽管这个名字听起来有点很有气势，能唬人，但在计算机科学中，其实就是针对一系列常见的代码实战场景所做的范式化归纳。设计模式采用多种方法解决面向对象设计者经常碰到的问题。
+
+在学习设计模式之前，请先回顾自己是否遇到过以下场景：
+•	我要实现的这个特性中有一些被频繁使用的代码，并且在其它特性中也被用到了，我不想总是做重复的事，那样费力且容易出错，因此需要一种方法能把这些稳固的代码抽象出来。
+•	这两个模块耦合太紧密了，代码一团糟，你中有我，我中有你，真令人抓狂！有什么办法彻底解耦吗？
+•	有一位兄弟的代码经过测试功能无误，但他的实现思路很奇怪，可读性差。我有更好的方法，但是必须首先说服他接受我的意见，我该拿出怎样权威的理由证明给他看呢？
+•	常听到有人抱怨说软件实现太灵活了，每个人都有不同的思路。那么如何才能让一个团队的代码看起来犹如同一个人写的那样，具有良好的可读性和可维护性呢？
+
+架构设计与设计模式的关系
+•	架构设计是要给出一个框架；而系统设计基于这个框架实现具体的功能需求。
+
+•	软件架构设计的焦点问题：可扩展性。为了总体收益最大化，我们甚至愿意让性能些微下降来换取可扩展性。
+
+•	架构设计经验的传承－－设计模式！
+
+设计原则与设计模式的关系
+•	设计原则是战略，设计模式是战术。
+
+•	Don’t Repeat Yourself (DRY)
+•	不要重复，DRY 是一个最简单的法则，也是最容易被理解的。当我们在两个或多个地方的时候发现一些相似的代码的时候，我们需要把他们的共性抽象出来形一个唯一的新方法。
+
+•	Keep It Simple, Stupid (KISS)
+•	保持简单，KISS原则在设计上可能最被推崇的。例如“宜家”（IKEA）简约、效率的家居设计、生产思路； “谷歌”（Google)简约、直接的商业风格，而苹果公司的iPhone/iPad将这个原则实践到了极至。
+
+•	Program to an interface, not an implementation
+•	这是设计模式中最根本的哲学，注重和依赖接口，而不是实现。接口是抽象和稳定的，实现则是多种多样的。
+
+•	Command-Query Separation (CQS)
+•	命令-查询分离原则，CQS原则在设计接口上，如果可能，应该尽量使接口单一化，保证方法的行为严格的是命令或者是查询，这样查询方法不会改变对象的状态，没有副作用。实际应用时在语义的清晰性和使用的简单性之间需要权衡。另外补充一点说明：更改状态，需要封装成函数或宏定义，方便扩展。
+
+•	You Ain’t Gonna Need It (YAGNI)
+•	YAGNI原则简而言之为——只考虑和设计必须的功能，避免过度设计。只实现目前需要的功能，在以后您需要更多功能时，可以再进行添加。例如架构师设计系统时，会考虑很多扩展性的东西，使用了大量折衷，导致项目失败。
+
+•	Law of Demeter – 迪米特法则
+•	迪米特法则(LoD)，又称“最少知识原则”。在《Clean Code》一书中，有一段违反了LoD的代码：
+•	final String outputDir = ctxt.getOptions().getScratchDir().getAbsolutePath(); 增加了耦合，使得代码结构复杂、僵化，难以扩展和维护。一个对象对其它对象的内容更有兴趣，老是羡慕别的对象的成员、结构或者功能，大老远的调用人家的东西，这样的结构显然是不合理的。应该调整程序的结构，让那个对象自己拥有它羡慕的feature，或者使用合理的设计模式（例如Facade和Mediator）。
+面向对象的S.O.L.I.D 设计原则
+
+•	Single Responsibility Principle (SRP) –职责单一原则
+•	其核心的思想是：一个类，只做一件事，并把这件事做好。单一职责原则可以看作是低耦合、高内聚在面向对象原则上的引申，职责过多，可能引起它变化的原因就越多，这将导致职责依赖，相互之间产生更多影响。
+
+•	Open/Closed Principle (OCP) – 开闭原则
+•	其核心的思想是：模块是可扩展的，而不可修改的。也就是说，对扩展是开放的，而对修改是封闭的。
+•	对修改封闭，意味着类一旦设计完成，就可以独立完成其工作，而不要对类进行任何修改。 
+•	比如我们的C 语言的qsort()允许你提供一个“比较器”，浏览器的各种插件也属于这个原则的实践。
+
+•	Liskov substitution principle (LSP) – 里氏代换原则
+•	子类必须能够替换成它们的基类。LSP给了我们一个判断和设计类之间关系的基准：需不需要继承，以及怎样设计继承关系。
+
+•	Interface Segregation Principle (ISP) – 接口隔离原则
+•	接口隔离原则意思是把功能实现在接口中，而不是类中，使用多个专门的接口比使用单一的总接口要好。例如，我们对电脑有不同的使用方式，比如：写作，通讯，看电影，打游戏，上网，等等，如果我们把这些功能都声明在电脑的抽象类里面，那么我们的上网本，PC机，服务器，笔记本的实现类都要实现所有的这些接口，这就显得太复杂了。
+
+•	Dependency Inversion Principle (DIP) – 依赖倒置原则
+•	高层模块不应该依赖于低层模块的实现，而是依赖于高层抽象。举个例子，墙面的开关不应该依赖于电灯的开关实现，而是应该依赖于一个抽象的开关的标准接口，这样，当我们扩展程序的时候，我们的开关同样可以控制其它不同的灯，甚至不同的电器。也就是说，电灯和其它电器继承并实现我们的标准开关接口，而我们的开关产商就可不需要关于其要控制什么样的设备，只需要关心那个标准的开关标准。这就是依赖倒置原则。
+
+C语言如何实践设计模式？
+
+        设计模式是应OO的需求而生的。C++是一门复杂的OO语言，想要驾驭得好可不是一件容易的事。于是一些常用的程序设计和实现场景被提炼出来形成了规范。这些规范得到了C++，Java，C#程序员的广泛使用并取得了良好的效果。于是有人就问，C语言也可以运用设计模式吗？
+
+   一个自然的做法就是在删除nic的函数里依葫芦画瓢增加一行，并做点小修改。
+
+    
+
+
+
+
+
+
+
+
+
+
+    但是你还没有舒服几天，就收到一个问题单，说module_xxx里对应于nic的内容没有删除！Oh，天哪！你认为不应该再这样下去了。于是你想出来一个妙招：他强由他强，清风拂山岗；他横任他横，明月照大江。
+         你在系统中构造了一条“事件通知链”，谁对删除nic这个事件感兴趣，就把自己的处理动作挂到链上。这样一来，nic_delete()就不再和具体的模块耦合，问题单不会再压到你的头上。
+
+        经过一系列的重构，现在似乎应该到了尘埃落定的时候了。还记得最初的疑问吗？事实上，刚才你所用得解决问题的技巧，就是一种设计模式，称之为：“Observer”。        
+
+•	不要试图用C来模仿C++，那样会导致你的注意力集中于语言本身的华丽技巧而忘记了自己究竟想做什么。除非你想再次发明C++
+•	要知道，即便是同为OO语言的C#，实现设计模式的方法和C++都截然不同。
+
+
+•	设计模式解决的是和代码息息相关的设计问题，而不是更高层次的架构抽象问题。每一个模式最终都应该用可以工作的代码而不是UML图来诠释。
+
+
+•	需求是灵活多变的，设计模式不可能涵盖任何情况，但可以启发我们的设计思维。并且推动我们更为深入地掌握C语言。
+
+
+•	不要试图在你的代码中全方位地套用设计模式，熟练地运用几种模式来解决问题就足够了。模式只是手段，用“高内聚，低耦合”的代码为业务服务才是业务团队每一位程序员追求的目标。
+
+设计既生活
+C语言之于OO
+
+    C语言是为写可移植的UNIX设计的，是对纷繁的CPU指令的一种高度抽象。可以理解成面向人类的，与机器无关的“汇编语言”。
+
+      要想用C语言实践设计模式，就必须掌握OO的基本要素和一点点实现的技巧。
+
+                 工欲善其事，必先利其器。
+OO的基本元素
+•	继承 – 也叫泛化。派生类（子类）拥有父类的全部属性和方法，并且也可包含它们自己的。
+•	封装 –通过限制只有特定类的实例可以访问这一特定类的成员，通常利用接口实现消息的传入传出。
+•	多态性–是指由继承而产生的相关的不同的类，其对象 对同一消息会做出不同的响应。
+•	组合 – 一个对象由多个子对象组合在一起构成。它们具有一样的生命周期。比如人的四肢和人体本身是密不可分的，不可独立存在。
+•	聚合 – 一个对象由多个子对象组合在一起构成。子对象具有自己的生命周期。比如一辆汽车，即便它的发动机寿终正寝了，也许它的轮胎、玻璃、座椅等部件还可以使用。
+泛化：继承
+一个类是从另一个类继承而来的。C++有约定的语法来处理这种关系。C可以这样做。
+
+泛化：多重继承
+一个类是从其它多个类继承而来的。
+
+组合
+一个对象是由多个对象组合而成的，并且它和构成它的子对象集有同样的生命周期。
+
+聚合
+一个对象是由多个对象组合而成的，但子对象具有独立的生命周期。
+数据结构
+•	数据结构的设计是体现OO思想最关键的地方。有这样一句话：“所谓面向对象，就是抽象出具有动作的数据；所谓闭包，就是抽象出具有数据的动作”。
+数据结构
+•	OO数据结构的特征有二：
+•	属性：这个对象有哪些特性？
+•	方法：这个对象如何与其它对象互动？也就是我们常说的函数。
+
+•	只有紧密相关的一组元素才能内聚在一起，构成对象。
+•	与外界如何交互，是由对象的职能决定的。
+案例：系统中的OLC算法是面向过程的设计。如果要体现OO，那么可以这样做：
+struct bucket_node {
+    char name[NAMESZ];
+    struct list vlist;   /* 用于父子指针 */
+    struct list hlist;   /* 用户兄弟指针 */
+    struct hlist nlist;  /* 用于加速查找的 hash 表指针*/
+
+    u8 weight;           /* 占上级溢出门限的权重，其值等于实际
+                          * 分配权重乘以100，如果不占权重，其
+                          * 值等于 0
+                          */
+    u16 overflow;        /* 计数器溢出门限, 0表示透传 */
+    u16 idle_tok;        /* 空闲令牌计数器 */
+    u16 threshold;       /* 计数器门限，缺省等于系统令牌数 */
+    u16 meter;           /* 实时计数器 */
+    u16 limit;           /* 报文限速(pps)，0表示不限速 */
+
+    /* 换下页 */
+    
+
+    /* 接上页 */
+    /* 用于刷新水位 */
+    u32 c_deficiency;   /* 固定更新：子节点空闲令牌总数 */
+    u32 c_debt;         /* 固定更新：子节点债务总数 */
+    u32 r_deficiency;   /* 实时更新：子节点空闲令牌余额 */
+    u32 r_debt;         /* 实时更新：子节点债务余额 */
+
+    s16 type;           /* 节点的类型 */
+    s16 height;         /* 节点在树中的高度 */
+    u16 ext_nrs;        /* extend的个数 */
+    u16 index;          /* 节点在数组中的索引 */
+    u32 flags;          /* 节点标志bitmap */
+
+    u16 (*inc_meter)(struct bucket_node *);  /* 实时增加流量计数 */
+    u32 (*process)(struct queue *);          /* 处理队列消息 */
+    void (*destroy)(struct bucket_node *);   /* 释放自己 */
+
+    void * extend[0];   /* 扩展的用途：
+                         *    1. 对于root节点，extend[0]记录最后一个被选
+                         *       择的core;extend[1]记录所有的高优先级节
+                         *       点;
+                         *    2. 对于core节点，extend[0]记录第一个leaf；
+                         *       extend[1]记录最后一个被选择的leaf;
+                         *    3. 对于leaf节点，extend[0]记录同core的下一
+                         *       个leaf;extend[1]记录指向报文队列的指针;
+                         */
+};
+
+数据结构
+•	OLC算法是树型结构，每个节点代表一个漏桶，它就是一个自然类。这个漏桶类有自己的名字，权重占比、水位计数器和限速阈值这样的业务属性；也有节点类型、高度以及bitmap这样的管理属性。它还拥有三个用于交互的方法：
+•	Inc_meter()；用于增加自己的水位计数器
+•	Process()；用于处理队列报文
+•	Destroy()；用于结束自己的生命周期
+•	每个节点还可能有一个或者多个扩展属性，用extend[0]占位。
+万事俱备只欠东风~~
+    用C进行OO编程，有了以上的概念和方法就足够了。我们要避免追求华丽丽的技巧本身，因为这里不是IOCCC（国际C语言混乱大赛）的角斗场！
+设计模式案例123
+
+            经典的Gof设计模式有三类二十三种，它们可以分为：创建型，结构型和行为型。
+
+–	创建型 ：创建对象实例的方法。
+
+–	结构型：处理对象之间关系的方法。
+
+–	行为型：处理对象之间互动的方法。
+
+•	C语言在处理OO问题上“先天不足”，所以我们不能套用为OO而生的经典设计模式。但可以模仿它的分类方法。
+
+要注意的问题
+•	三类设计模式是相辅相成的。首先，必须对数据结构进行OO抽象，然后再考虑创建和行为。如果一份C代码在设计之初就没有做这样的抽象，那么也就不能简单地套用设计模式来重构。
+
+创建型
+创建型
+•	创建型要解决动态生成对象的问题。经典的OO创建型模式有五种：
+•	Factory Method
+•	Abstract Factory
+•	Builder
+•	Prototype
+•	Singleton
+工厂方法模式
+•	OO描述：定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。
+
+•	UML描述：
+
+
+
+
+
+
+
+
+
+
+附：UML图形描述
+工厂方法模式
+•	隐喻：
+	把动态分配内存的工作交给一个“工厂”来做，我们只要告诉工厂需要什么规格的产品就可以了。
+•	用途：
+	对客户隐藏内存分配的细节和复杂的创建过程，使内部算法的剧烈变动不会影响到调用者的代码。
+
+工厂方法模式
+工厂方法模式
+这个写法对于实现功能并没有影响，但有几个问题：
+•	这段代码重复度很高，并且调用者需要记住PID_VMIF,VMIF_MAX_MLINFO_SIZE这样的细节，如果在不同的任务中使用，或者要修改申请的大小，还得去查任务ID和大小宏的名称，一不留神就可能出错；
+•	VOS_MemSet()和VOS_Malloc()为同一个目标服务，不应该直接暴露给用户。
+
+因此，我们可以建立一个专门生产这类“产品”的工厂。
+工厂方法模式
+/*
+  * 在WMIF模块内定义分配字符串的接口。细节被封装起来，这样今后不但
+  * 使用方便，也不容易出错了。显然，记忆VMIF_String_Max_Alloc()这
+  * 样的名字比记一大堆的宏容易多了。
+  */
+CHAR * VMIF_String_Max_Alloc()
+{
+    CHAR * TempStr = VOS_Malloc(PID_VMIF, VMIF_MAX_MLINFO_SIZE *    
+                                sizeof(CHAR));
+    if (NULL_PTR == TempStr)
+    {
+        /* szx-pending */
+        VOS_RECORD_ERROR(ERR_VMIF_NULLPTR);
+        return NULL_PTR;
+    }
+    VOS_MemSet(TempStr, 0, VMIF_MAX_MLINFO_SIZE  * sizeof(CHAR));
+
+    return TempStr;
+}
+工厂方法模式
+/*
+  * 与之对应的是，同时应该定义释放字符串对象
+  * 的接口。
+  */
+VOID VMIF_String_Free(CHAR *String)
+{
+    VOS_Free(String);
+}
+工厂方法模式
+/*
+  * 我们在系统中建造了一间大工厂，可以按需生成
+  * 各种各样的String。
+  */
+CHAR * String_Alloc_Max_for(enum Module mod)
+{
+    CHAR * TempStr;
+
+    switch (mod) {
+        case MOD_WMIF:
+                TempStr = WMIF_String_Alloc();
+                break;
+
+        case MOD_VOMSHL:
+                TempStr = VOMSHL_String_Alloc();
+                break;
+        default:
+                TempStr = NULL;
+    }
+
+    return TempStr;
+}
+工厂方法模式
+/*
+  * 我们在系统中建造了一间大工厂，可以按需生成
+  * 各种各样的String。
+  */
+CHAR * String_Alloc_Max_for(enum Module mod)
+{
+    CHAR * TempStr;
+
+    switch (mod) {
+        case MOD_WMIF:
+                TempStr = WMIF_String_Alloc();
+                break;
+
+        case MOD_VOMSHL:
+                TempStr = VOMSHL_String_Alloc();
+                break;
+        default:
+                TempStr = NULL;
+    }
+
+    return TempStr;
+}
+工厂方法模式
+事实上，C++演示工厂模式的例子经常会这样实现，但还可以采用更好的方法来消除分支，并且用C语言实现它非常干净利落。
+工厂方法模式
+工厂方法模式
+    工厂的核心内容是不管这个产品要由多少产品来配置。使用这个系统的人不需要关注产品是如何被装配起来的。得到一个测试控制块需要两步：
+1.得到一个空闲索引；
+2.分配对应于这个索引的全局控制块数组的元素。
+这两个步骤不需要用户了解，全局控制块更没有必要暴露在用户面前。他只需要成功得到一个测试控制块就可以了。
+
+工厂方法模式
+工厂方法模式
+•	最后来看一下开源的例子。
+•	案例3：linux kernel实现vlan设备的方法很巧妙，接口也很方便：可以用register_vlan_device()为上级网络设备添加vlan子设备。
+工厂方法模式
+/*  Attach a VLAN device to a mac address (ie Ethernet Card).
+ *  Returns 0 if the device was created or a negative error code otherwise.
+ */
+static int register_vlan_device(struct net_device *real_dev, u16 vlan_id)
+{
+	struct net_device *new_dev;
+	struct net *net = dev_net(real_dev);  /* 第一个小工厂 */
+	struct vlan_net *vn = net_generic(net, vlan_net_id);  /* 第二个小工厂 */
+	char name[IFNAMSIZ];
+	int err;
+
+	if (vlan_id >= VLAN_VID_MASK)
+		return -ERANGE;
+
+	err = vlan_check_real_dev(real_dev, vlan_id);
+	if (err < 0)
+		return err;
+
+	new_dev = alloc_netdev(sizeof(struct vlan_dev_info), name, vlan_setup);  /* 第三个小工厂 */
+	if (new_dev == NULL)
+		return -ENOBUFS;
+        /* 转下页 */
+    
+工厂方法模式
+       /* 接上页 */
+	dev_net_set(new_dev, net);  /* 对象组装 */
+	new_dev->mtu = real_dev->mtu;
+
+	vlan_dev_info(new_dev)->vlan_id = vlan_id;  /* 对象配置 */
+	vlan_dev_info(new_dev)->real_dev = real_dev;
+	vlan_dev_info(new_dev)->dent = NULL;
+	vlan_dev_info(new_dev)->flags = VLAN_FLAG_REORDER_HDR;
+
+	new_dev->rtnl_link_ops = &vlan_link_ops;
+	err = register_vlan_dev(new_dev);  /* 对象被放入系统资源池 */
+	if (err < 0)
+		goto out_free_newdev;
+
+	return 0;
+out_free_newdev:
+	free_netdev(new_dev);
+	return err;
+}
+工厂方法模式：回调变体
+•	回想一下，我们的代码中是不是有很多流程一模一样，仅仅个别语句不一样的接口呢？但调用者却要记住这些接口的名字，于是客户代码和库代码耦合在一起，非常难修改。如果你厌倦了这样罗嗦的表达方式，就可以考虑用工厂模式的变体来重构。
+工厂方法模式：回调变体
+•	在上一个例子中，我们看到了一个小工厂：
+
+   vlan_setup是一个回调函数，这个工厂的特点是可以由客户决定生产过程中的一些细节动作。
+工厂方法模式：回调变体
+/**
+ *	alloc_netdev - allocate network device
+ *	@sizeof_priv:	size of private data to allocate space for
+ *	@name:		device name format string
+ *	@setup:		callback to initialize device
+ *
+ *	Allocates a struct net_device with private data area for driver use
+ *	and performs basic initialization.
+ */
+struct net_device *alloc_netdev(int sizeof_priv, const char *name,
+		void (*setup)(struct net_device *))
+{
+	void *p;
+	struct net_device *dev;
+	int alloc_size;
+
+	BUG_ON(strlen(name) >= sizeof(dev->name));
+
+	/* ensure 32-byte alignment of both the device and private area */
+	alloc_size = (sizeof(*dev) + NETDEV_ALIGN_CONST) & ~NETDEV_ALIGN_CONST;
+	alloc_size += sizeof_priv + NETDEV_ALIGN_CONST;
+
+	p = kzalloc(alloc_size, GFP_KERNEL);
+	if (!p) {
+		printk(KERN_ERR "alloc_netdev: Unable to allocate device.\n");
+		return NULL;
+	}
+
+	dev = (struct net_device *)
+		(((long)p + NETDEV_ALIGN_CONST) & ~NETDEV_ALIGN_CONST);
+	dev->padded = (char *)dev - (char *)p;
+
+	if (sizeof_priv)
+		dev->priv = netdev_priv(dev);
+
+	setup(dev);  /* 回调函数在这里被使用 */
+	strcpy(dev->name, name);
+	return dev;
+}
+工厂方法模式：初始化器变体
+•	如果有一个对象常每次创建之后都要用一大堆雷同的数据来初始化，那么我们就可以为之构造一个“初始化器”。
+工厂方法模式：初始化器变体
+ * POTS_TEST_CMD_INIT - 缺省初始化CMD结构体
+ *
+ * NOTE:
+ *   默认使用单频音，第二频率值置成0
+ */
+#define POTS_TEST_CMD_INIT {                           \
+        .ucCmd = POTS_CMD,                             \
+        .ucSerialNum = NULL_UCHAR,                     \
+        .ucSubCmd = POTS_SEARCH_TONE_CMD,              \
+        .ucType = VTEST_START_SEARCHINGTONE_TEST,      \
+        .ucSecondFrequencyH = 0,                       \
+        .ucSecondFrequencyL = 0,                       \
+        .ucLevel = VTEST_SEARCHINGTONE_VLEVEL_DEFAULT, \
+    }
+
+/* 静态分配内存，初始化器让程序员少写了很多代码 */
+TEST_TO_POTS_SEARCH_TONE_S stPotsTestCmd = POTS_TEST_CMD_INIT;
+/* 动态创建的变量也可以这么用 */
+TEST_TO_POTS_SEARCH_TONE_S *pstPotsTestCmd =                              
+                           malloc(sizeof(TEST_TO_POTS_SEARCH_TONE_S));
+*pstPotsTestCmd = (TEST_TO_POTS_SEARCH_TONE_S)POTS_TEST_CMD_INIT;
+工厂方法模式：初始化器变体
+/**
+  * 如果绝大多数成员的值是稳定的，但有几个会剧烈变动，那么
+  * 可以定义一个携带参数的初始化器。
+  */
+#define field_setup(p,m,v)  ((p)->m = (v))
+
+#define VTP_SEARCHTONE_CB_INIT(pcb,data,type)                           \
+    do {                                                                \
+            USHORT __time = (data)->usSearchToneRemainingTime;          \ 
+            field_setup((pcb), ulMeltTestType, (type));                 \                       
+            field_setup((pcb), usFrameID, (data)->ucFrameID);           \
+            field_setup((pcb), ucSlotID, (data)->ucSlotID);             \
+            field_setup((pcb), ucPortID, (data)->ucPortID);             \
+            field_setup((pcb), ulMeltTestUserID, (data)->ulUserID);     \
+            field_setup((pcb), ulRemainingTick, __time * TICKS_FACTOR); \
+            field_setup((pcb), ulStartTick, VOS_GetTick());             \
+    } while (0)
+工厂方法模式
+•	小节
+   工厂方法模式就是在代码中建立这样一个方法集—它能为我们按需分配内存。用户无需为得到这些内存记忆具体的细节。工厂生产方法的变化对上层用户透明。
+原型模式
+•	OO描述：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
+•	UML描述：
+原型模式
+•	工厂模式是一种从无到有创建产品的方法。但有的时候，依照已经存在的产品实体来创建更加方便。这就是原型模式。
+原型模式
+•	案例1：对于macvlan协议，经常要向vlan内的端口广播一个报文，重新创建报文开销太大，因此linux kernel的网络子系统是这样处理的。
+
+原型模式
+原型模式
+•	案例2：在VOIP_SendSctpData()中，调用VOS_CopySocket()复制socket，避免了再次创建。
+
+原型模式
+•	小节：
+•	原型模式看起来也是一种工厂，但它是仿造而不是原创。
+•	当克隆一个对象比重新创建更方便的时候，使用原型模式。
+结构型
+结构型
+•	OO的结构型有8种模式。但我们只需要考察Bridge、Façade和Proxy。其它的模式要么不适合底层软件的特点，要么实现起来非常复杂，技巧性太强。
+Bridge
+•	OO描述：将抽象部分与它的实现部分分离，使它们都可以独立地变化。
+•	UML描述：
+Bridge
+•	从UML图可以看出，在OO中，Bridge是指把IS-A关系用HAS-A来替换。那么C语言处理这种情况是非常方便的。
+
+Bridge
+•	案例：因为我们的代码不是基于OO构造的，所以拿linux kernel的网络设备模型作为考察对象。
+
+Bridge
+•	如果我们把网络设备视为对象的话，很自然地，设备的操作方法应该是设备对象方法的一部分。但不同类型的网络设备的操作方法集不同，因此它是代码中剧烈变动的部分。同理，相同类型的网络设备对象的操作方法集相同，应该让它被共享。
+Bridge
+/*
+  * 使用了Bridge模式之后，对象的操作和对象的抽象分离，
+  * 避免了耦合，隔离了不同设备的动作差异，也提高了重用度。
+  * 打开和关闭设备的代码可以这样写，并且不受具体打开和
+  * 关闭动作细节的影响。
+  */
+if (netif_running(netdev))
+        netdev->netdev_ops->ndo_open(netdev);
+
+if (netif_running(netdev))
+        netdev->netdev_ops->ndo_stop(netdev);
+Facade
+•	OO描述：为子系统中的一组接口提供一个一致的界面，F a c a d e 模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+•	UML描述：
+•	案例：map 消息机制
+Facade
+•	这个模式在我们的系统中很常见：一个复杂子系统只提供了一个简单接口，从而对客户屏蔽了内部细节，达到调用和实现解耦的目的。
+•	隐喻：家里再怎么乱都行，但门口始终是 干干净净的。
+Facade
+•	只有当一个复杂的子系统有多个剧烈变化的接口时，才考虑用Facade模式来重构。
+Facade
+案例1：报文需要分发给不同的任务处理，如果每个任务都有自己的收包接口，那么驱动代码就会和这些任务耦合在一起。利用Façade模式，我们可以对外只提供一个总的收包接口，具体的处理细节被封装起来。
+
+实现代码请参见系统的分发任务。
+Proxy
+•	OO描述：为其他对象提供一种代理以控制对这个对象的访问。
+•	UML描述：
+Proxy
+代理模式就是在用户和对象之间增加访问控制接口，形成“访问层”，方便控制对原始对象的访问。基于接口，而不是基于实现。
+这样做有几个好处：
+•	用户代码和对象代码通过中间层解耦。
+•	访问方式标准化，减少了出错机会。
+•	便于控制不同用户的访问能力。
+
+Proxy
+•	我们在系统中大量使用的hook其实就是Proxy模式的一种表现形式。通过hook，平台和产品代码解耦。这种形式大家已经比较熟练，就不举例了。但还有另外一种实用的场景在系统中很少见。
+Proxy
+案例1：linux kernel的网络协议栈用sk_buff操作报文，为了以规范的方式对这个对象进行控制，抽象了一系列的接口。
+
+
+Proxy
+案例2：我们习惯于用灵活的TLV格式传递消息，但通常都是使用者自己写生硬的指针操作，整套代码显得风格不一致，暴露了很多缺陷。如果将来升级到多核或者可抢占系统，那么还必须解决TLV实例被共享访问的互斥问题。如果一开始就构造一个“代理”访问接口，那么问题就会被大大简化。
+Proxy
+Proxy
+•	小节：
+–	代理模式的适用场景很多，也非常容易实现。最简单的莫过于放一个hook出来了。但是要注意的是，一定要在进行了OO设计的前提下才能放hook，否则，这个hook就和单板上的飞线一样可怕了
+行为型
+State
+•	OO描述：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。
+•	UML描述：
+State
+•	案例1：ip协议栈在解析完报文之后，需要决定报文的去向。可能传递到L4，也可能转发，或者干脆丢弃。
+•	一种实现方法是用分支来控制流程
+State
+这样的实现将导致调用者感知到报文去向的细节，不利于解耦。因此，可以用State模式在查路由表的时候就动态改变Packet的“投递”行为。
+Chain of Responsibility
+•	OO描述：使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。
+•	UML描述：
+Chain of Responsibility
+•	这个模式和Observer模式的区别在于它有多个潜在的处理者，但最终只有一个处理者起作用。
+•	案例1：考虑iptables过滤机制。我们定义了两条过滤规则。加上默认规则，一共三条：
+•	-P INPUT ACCEPT
+•	-A INPUT -s 192.168.2.0/24 -j DROP 
+•	-A INPUT -s 192.168.2.100/32 -j DROP
+
+•	来自192.168.2.100的报文在第二条规则点就被处理（DROP）了，不会传递到第三条规则点。这就是此模式的一个应用。iptables的代码非常复杂，理解概念就可以了，这里不再赘述。
+Template Method
+Template Method
+Template Method
+•	案例2：CFGR模块为其它应用模块定义了单板配置恢复各个阶段下发的配置操作，而各个业务模块通过注册具体的钩子函数来实现对不同单板下发本模块关心的配置。
+•	因为代码比较多，请自行参阅。
+总结
+•	同样的设计模式，用C++，Java，C#实现起来风格迥异，而C更不必说了。因此最后强调一次：除非你想发明另一个Cxx语言，否则不需要为了套用设计模式而在编码风格上向C++靠拢。
+•	我们考察了几种常见的设计模式。
+片尾语
+附录A：参考书籍
+•	《设计模式》GoF经典
+•	《深入浅出设计模式》
+•	《敏捷软件开发：原则、模式与实践》
+
+
+•	再次感谢杜军，张森两位大侠！在原著的基础上增加修改了少量内容，如有不妥，请多多包涵！
+未海洪
+2012-9-18
+
+附录B：两份样例代码

@@ -1,0 +1,546 @@
+设计模式（基于C语言）总结
+郑鑫鑫 00523165
+（学习文件：《设计模式(基于C语言)》.pptx）
+目录
+设计模式（基于C语言）总结	1
+1、什么是设计模式？	1
+1.1设计模式可以解决以下问题：	1
+1.2设计原则与设计模式的关系：	2
+1.3 面向对象的SOLID设计原则：	2
+2、C语言如何实践设计模式？	2
+2.1 OO的基本元素：	2
+2.2 数据结构	4
+3、设计模式案例	4
+3.1 创建型	5
+3.1.1工厂方法模式	5
+3.1.2原型模式	9
+3.2结构型	10
+3.2.1 Bridge	10
+3.2.2 Facade	12
+3.2.3 Proxy	13
+3.3行为型	15
+3.3.1 Template Method（模板方法）	15
+3.3.2 Chain of Responsibility（责任链）	17
+3.3.3 State（状态）	17
+总结	18
+
+ 
+
+1、什么是设计模式？
+	在计算机科学中，就是针对一系列常见的代码实战场景所做的范式化归纳。设计模式采用多种方法解决面向对象设计者经常碰到的问题。设计模式要做的，就是把代码中相对稳定的部分和剧烈变动的部分解耦，从而将变化对代码产生的影响局限在小范围内。
+1.1设计模式可以解决以下问题：
+1)	我要实现的这个特性中有一些被频繁使用的代码，在其它特性中也被用到了，不想总是做重复的事，那样费力且容易出错，因此需要一种方法能把这些稳固的代码抽象出来。
+2)	这两个模块耦合太紧密了，代码一团糟。有什么办法彻底解耦吗？
+3)	有一位兄弟的代码经过测试功能无误，但他的实现思路很奇怪，可读性差。我有更好的方法，但是必须首先说服他接受我的意见，我该拿出怎样权威的理由证明给他看呢？
+4)	常听到有人抱怨说软件实现太灵活了，每个人都有不同的思路。那么如何才能让一个团队的代码看起来犹如同一个人写的那样，具有良好的可读性和可维护性呢？
+
+1.2设计原则与设计模式的关系：
+设计原则是战略，设计模式是战术！
+1.3 面向对象的SOLID设计原则：
+1)	职责单一原则：一个类只做一件事！
+2)	开闭原则：模块是可扩展的，而不可修改的！
+3)	里氏代换原则：子类必须能够替换成它们的基类！该原则给了我们一个判断和设计类之间关系的基准。
+4)	接口隔离原则：把功能实现在接口中而非类中，使用多个专门的接口比使用单一的总接口要好。
+5)	依赖倒置原则：高层模块不应该依赖于底层模块的实现，而是依赖于高层抽象。
+2、C语言如何实践设计模式？
+C语言是可以作为设计模式的实现者的，但是必须就几条原则达成共识！
+1)	不要试图用C来模仿C++，那样会导致你的注意力集中于语言本身的华丽技巧而忘记了自己究竟想做什么。
+2)	设计模式解决的是和代码息息相关的设计问题，而不是更高层次的架构抽象问题。每一个模式最终都应该用可以工作的代码而不是UML图来诠释。
+3)	需求是灵活多变的，设计模式不可能涵盖任何情况，但可以启发我们的设计思维。并且推动我们更为深入地掌握C语言。
+4)	不要试图在你的代码中全方位地套用设计模式，熟练地运用几种模式来解决问题就足够了。模式只是手段，用“高内聚，低耦合”的代码为业务服务才是业务团队每一位程序员追求的目标。
+	要想用C语言实践设计模式，就必须掌握面向对象(Object Oriented,OO)的基本要素和一点点实现的技巧。
+2.1 OO的基本元素：
+1)	继承：也叫泛化。派生类拥有父类的全部属性和方法，并且也可包含它们自己的。
+2)	封装：限制只有特定类的实例可以访问该类的成员，通常是接口实现消息传入传出。
+3)	多态性：指由继承而产生的相关的不同的类，其对象 对同一消息会做出不同的响应。
+4)	组合：一个对象由多个子对象组合在一起构成。它们具有一样的生命周期。
+5)	聚合：一个对象由多个子对象组合在一起构成。子对象具有自己的生命周期。
+
+1.	泛化：继承。一个类是从另一个类继承而来的。C++有约定的语法处理这种关系，但是C可以下面这样做。
+1.	/* 
+2.	  * 在struct dev中嵌入一个struct list成员， 
+3.	  * 这样dev就拥有了list的所有属性。  通过 
+4.	  * 这种方式，我们把struct list模拟成超类， 
+5.	  * struct dev是它的派生类。 
+6.	  */  
+7.	struct  list {  
+8.	    struct list *prev, *next;  
+9.	};  
+10.	  
+11.	struct dev {  
+12.	    struct list head;  
+13.	    char name[DEV_NAME_SZ];  
+14.	    unsigned int flags;  
+15.	};  
+2.	泛化：多重继承。一个类是从其他多个类继承而来的。
+1.	/* 
+2.	  * 为了加速查找dev，我们把它挂在hash表上。 
+3.	  * 这样一来，dev同时拥有list和hlist的属性。 
+4.	  */  
+5.	struct  list {  
+6.	    struct list *prev, *next;  
+7.	};  
+8.	struct  hlist {  
+9.	    struct list *next, **prev;  
+10.	};  
+11.	  
+12.	struct dev {  
+13.	    struct list;  
+14.	    struct hlist;  
+15.	    char name[DEV_NAME_SZ];  
+16.	    unsigned int flags;  
+17.	};  
+3.	组合。一个对象是由多个对象组合而成的，并且它和构成它的子对象有同样的生命周期。
+1.	/* 
+2.	  * struct dev 的name成员是一个指针，dev实例 
+3.	  * 被创建的时候为name分配内存；实例销毁的时 
+4.	  * 候同时也释放name的空间。 
+5.	  */  
+6.	struct dev {  
+7.	    struct list;  
+8.	    struct hlist;  
+9.	    char *name;  
+10.	    unsigned int flags;  
+11.	};  
+4.	聚合。一个对象是由多个对象组合而成的，但子对象具有独立的生命周期。
+1.	/* 
+2.	  * struct dev 的方法集ops成员是一个指针，它 
+3.	  * 的实例被静态分配。当dev实例创建的时候指
+  * 合适的ops实例。dev实例销毁的时候不销毁 
+4.	  * ops，因为别的dev实例可能还在用它。 
+5.	  */  
+6.	struct dev {  
+7.	    struct list;  
+8.	    struct hlist;  
+9.	    char *name;  
+10.	    struct dev_ops *ops;  
+11.	    unsigned int flags;  
+12.	};  
+2.2 数据结构
+数据结构的设计是体现OO思想最关键的地方。有这样一句话：“所谓面向对象，就是抽象出具有动作的数据；所谓闭包，就是抽象出具有数据的动作”。面向对象的数据结构设计是运用设计模式的基础！OO数据结构的特征为属性和方法。
+3、设计模式案例
+	经典的GOF设计模式有三类二十三种，可以分为创建型、结构型和行为型。
+（GOF 23种设计模式：https://blog.csdn.net/zhangcanyan/article/details/51622380）
+	C语言在处理OO问题上“先天不足”，所以我们不能套用为OO而生的经典设计模式。但可以模仿它的分类方法。
+设计模式	经典GOF	C语言处理方式
+创建型：	创建对象实例的方法；	为对象动态分配内存；
+结构型：	处理对象之间关系的方法；	设计数据结构；
+行为型：	处理对象之间互动的方法。	定义模块之间的交互方式。
+	三类设计模式是相辅相成的。首先，必须对数据结构进行OO抽象，然后再考虑创建和行为。如果一份C代码在设计之初就没有做这样的抽象，那么也就不能简单地套用设计模式来重构。
+3.1 创建型
+创建型要解决动态生成对象的问题。经典的OO创建型模式有五种：
+1. Factory Method（工厂方法）
+2. Abstract Factory（抽象工厂）
+3. Builder（建造者）
+4. Prototype（原型）
+5. Singleton（单例）
+
+C语言没有构造和析构函数的概念，不支持重载、多态，和覆盖，甚至没有this指针，所以前3种模式的表现形式几乎一模一样，唯规模不同而已。可以统称“工厂方法模式”。
+3.1.1工厂方法模式
+意图：定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。
+适用性：
+	当一个类不知道它所必须创建的对象的类的时候。
+	当一个类希望由它的子类来指定它所创建的对象的时候。
+	当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。
+UML描述：
+ 
+隐喻：把动态分配内存的工作交给一个“工厂”来做。我们只要告诉工厂需要什么规格的产品就可以了。
+用途：对客户隐藏内存分配的细节和复杂的创建过程，使内部算法的剧烈变动不会影响到调用者的代码。
+--------------------------------------案例1--------------------------------------
+命令行操作中要为待输出的字符串申请内存。现有的代码中是这样写的：
+1.	/* 申请待输出字符串所使用的内存 */  
+2.	CHAR *szOutString;  
+3.	szOutString = VOS_Malloc(PID_VMIF, VMIF_MAX_MLINFO_SIZE * sizeof(CHAR));  
+4.	if (NULL_PTR == szOutString) {  
+5.	    /* szx-pending */  
+6.	    VOS_RECORD_ERROR(ERR_VMIF_NULLPTR);  
+7.	    return ERR_VMIF_NULLPTR;  
+8.	}  
+9.	
+10.	VOS_MemSet(szOutString, 0, VMIF_MAX_MLINFO_SIZE * sizeof(CHAR));  
+这个写法对于实现功能并没有影响，但有几个问题：
+	这段代码重复度很高，并且调用者需要记住PID_VMIF,VMIF_MAX_MLINFO_SIZE这样的细节，如果在不同的任务中使用，或者要修改申请的大小，还得去查任务ID和大小宏的名称，一不留神就可能出错；
+	VOS_MemSet()和VOS_Malloc()为同一个目标服务，不应该直接暴露给用户。
+
+因此，我们可以建立一个专门生产这类“产品”的工厂。
+1.	/* 
+2.	  * 在WMIF模块内定义分配字符串的接口。细节被封装起来，这样今后不但 
+3.	  * 使用方便，也不容易出错了。显然，记忆VMIF_String_Max_Alloc()这 
+4.	  * 样的名字比记一大堆的宏容易多了。 
+5.	  */  
+6.	CHAR * VMIF_String_Max_Alloc()  
+7.	{  
+8.	    CHAR * TempStr = VOS_Malloc(PID_VMIF, VMIF_MAX_MLINFO_SIZE *      
+9.	                                sizeof(CHAR));  
+10.	    if (NULL_PTR == TempStr)  
+11.	    {  
+12.	        /* szx-pending */  
+13.	        VOS_RECORD_ERROR(ERR_VMIF_NULLPTR);  
+14.	        return NULL_PTR;  
+15.	    }  
+16.	    VOS_MemSet(TempStr, 0, VMIF_MAX_MLINFO_SIZE  * sizeof(CHAR));
+17.	    return TempStr;  
+18.	}  
+19.	/* 
+20.	* 与之对应的是，同时应该定义释放字符串对象的接口。 
+21.	*/  
+22.	VOID VMIF_String_Free(CHAR *String)  
+23.	{  
+24.	    VOS_Free(String);  
+25.	}  
+有了这两个接口，我们就可以从这个“工厂”里面简单地得到一个字符串或者把存在的字符串丢进去销毁。在C语言的哲学里，Factory就是如此简单的一个模式，不需要我们煞费苦心地去模仿C++华丽的做法。
+系统越来越复杂，不仅仅是WMIF模块需要输出字符串了，VOMSHL模块也来凑一份热闹。于是，系统中出现了VOMSHL_String_Max_Alloc()。如此多的小作坊重复着类似的工作，这是一种浪费。看来，我们有必要把这些小作坊合并成一个大工厂了。
+1.	/* 我们在系统中建造了一间大工厂，可以按需生成各种各样的String。*/  
+2.	CHAR * String_Alloc_Max_for(enum Module mod)  
+3.	{  
+4.	    CHAR * TempStr;  
+5.	    switch (mod) {  
+6.	        case MOD_WMIF:  
+7.	                TempStr = WMIF_String_Alloc();  
+8.	                break;  
+9.	        case MOD_VOMSHL:  
+10.	                TempStr = VOMSHL_String_Alloc();  
+11.	                break;  
+12.	        default:  
+13.	                TempStr = NULL;  
+14.	    }  
+15.	  
+16.	    return TempStr;  
+17.	}  
+事实上，C++演示工厂模式的例子经常会这样实现，但还可以采用更好的方法来消除分支，并且用C语言实现它非常干净利落。
+1.	/* 
+2.	  * 大工厂不关心小作坊具体怎么分配内存，它简单地根据传入的申请内存的模块来调用事先注册的分配方法。这也是“依赖倒置”原则的体现。 
+3.	  */  
+4.	CHAR * String_Alloc_Max_for(const char *mod_name)  
+5.	{  
+6.	    CHAR * TempStr = NULL;  
+7.	    struct FactoryString *fs ;  
+8.	  
+9.	    if (mod < MOD_START || mod > MOD_NRS) {  
+10.	        return NULL;  
+11.	    }  
+12.	  
+13.	    /* 根据模块名找到注册的字符串工厂 */  
+14.	    fs = FactoryString_module(mod_name);    
+15.	    if (fs && fs->Alloc) {  
+16.	        TempStr = fs->Alloc();  
+17.	    }  
+18.	  
+19.	    return TempStr;  
+20.	}  
+----------------------------------（以上为）案例1-------------------------
+
+--------------------------------------案例2--------------------------------------
+语音测试启动的时候首先要申请测试控制块。目前代码的写法是这样的：
+1.	/*  
+2.	  * 分配POTS测试控制块。 
+3.	  * 第一步：取测试控制块索引； 
+4.	  * 第二步：根据索引找到空闲的控制块。 
+5.	  */  
+6.	if (TEST_RETURN_NO_ERR != VTEST_AllocateSignalToneTestCB(&ucSignalToneCBIndex))  {  
+7.	    VTEST_PotsOutTestReportErr(pstTData, aucTeleNum,    
+8.	                               cUserDataString,  
+9.	                               TEST_ML_INFO_FULL_OF_TEST,    
+10.	                               ppMsgSnd);  
+11.	  
+12.	    return TEST_ERR_FULL_OF_TEST;  
+13.	}  
+14.	  
+15.	pstSignalToneTestCB = g_stSignalToneTestCB + ucSignalToneCBIndex;  
+工厂的核心内容是不管这个产品要由多少产品来配置。使用这个系统的人不需要关注产品是如何被装配起来的。得到一个测试控制块需要两步：
+1.得到一个空闲索引；
+2.分配对应于这个索引的全局控制块数组的元素。
+这两个步骤不需要用户了解，全局控制块更没有必要暴露在用户面前。他只需要成功得到一个测试控制块就可以了。
+1.	/* 
+2.	  *  创建一个测试控制块需要两个对象： 
+3.	  *  1. 空闲索引； 
+4.	  *  2. 全局数组； 
+5.	  *  把这两个对象隐藏起来，用户不必关心如何操纵它们。 
+6.	  */  
+7.	SIGNAL_TONE_TEST_CTRL_BLOCK_S * vtp_searchtone_new()  
+8.	{  
+9.	    ULONG ulRet;  
+10.	    UCHAR ucSignalToneCBIndex;  
+11.	  
+12.	    ulRet = VTEST_AllocateSignalToneTestCB(&ucSignalToneCBIndex);  
+13.	    if (TEST_RETURN_NO_ERR != ulRet)  
+14.	    {  
+15.	        return NULL_PTR;  
+16.	    }  
+17.	  
+18.	    return g_stSignalToneTestCB + ucSignalToneCBIndex;  
+19.	}  
+----------------------------------（以上为）案例2-------------------------
+工厂方法模式总结：
+工厂方法模式就是在代码中建立这样一个方法集——它能为我们按需分配内存。用户无需为得到这些内存记忆具体的细节。工厂生产方法的变化对上层用户透明。
+
+3.1.2原型模式
+意图：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
+适用性：
+	当要实例化的类是在运行时刻指定时，例如，通过动态装载； 
+	为了避免创建一个与产品类层次平行的工厂类层次时； 
+	当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。
+UML描述：
+ 
+工厂模式是一种从无到有创建产品的方法。但有的时候，依照已经存在的产品实体来创建更加方便。这就是原型模式，即制作副本。
+（推荐博客：https://www.cnblogs.com/gaochundong/p/design_pattern_prototype.html）
+--------------------------------------案例1--------------------------------------
+	对于macvlan协议，经常要向vlan内的端口广播一个报文，重新创建报文开销太大，因此linux kernel的网络子系统是这样处理的。
+1.	static void macvlan_broadcast(struct sk_buff *skb,   
+2.	                              const struct macvlan_port *port,  
+3.	                              struct net_device *src,  
+4.	                              enum macvlan_mode mode)  
+5.	{  
+6.	    const struct ethhdr *eth = eth_hdr(skb);  
+7.	    const struct macvlan_dev *vlan;  
+8.	    struct hlist_node *n;  
+9.	    struct sk_buff *nskb;  
+10.	    unsigned int i;  
+11.	    int err;  
+12.	  
+13.	    if (skb->protocol == htons(ETH_P_PAUSE))  
+14.	        return;  
+15.	  
+16.	    for (i = 0; i < MACVLAN_HASH_SIZE; i++) {  
+17.	        hlist_for_each_entry_rcu(vlan, n, &port->vlan_hash[i], hlist) {  
+18.	            if (vlan->dev == src || !(vlan->mode & mode))  
+19.	                continue;  
+20.	  
+21.	            nskb = skb_clone(skb, GFP_ATOMIC);  /* 复制一份报文 */  
+22.	            err = macvlan_broadcast_one(nskb, vlan, eth,  
+23.	                                        mode == MACVLAN_MODE_BRIDGE);  
+24.	            macvlan_count_rx(vlan, skb->len + ETH_HLEN,  
+25.	                             err == NET_RX_SUCCESS, 1);  
+26.	        }  
+27.	    }  
+28.	}  
+	复制一个对象的好处不仅仅是减少了重复工作，更重要的是让代码的语义变得清晰。原型模式看起来也是一种工厂，但它是仿造而不是原创。当克隆一个对象比重新创建更方便的时候，使用原型模式。
+----------------------------------（以上为）案例1-------------------------
+3.2结构型
+	OO的结构型有8种模式。但我们只需要考察Bridge、Facade和Proxy。其它的模式要么不适合底层软件的特点，要么实现起来非常复杂，技巧性太强。
+Adapter Class/Object（适配器）、
+1.	Bridge（桥接）、
+2.	Composite（组合）、
+3.	Decorator（装饰）、
+4.	Facade（外观）、
+5.	Flyweight（享元）、
+6.	Proxy（代理）
+3.2.1 Bridge
+意图：将抽象部分与它的实现部分分离，使它们都可以独立地变化。
+适用性：
+	你不希望在抽象和它的实现部分之间有一个固定的绑定关系。
+	类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时Bridge 模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。
+	对一个抽象的实现部分的修改应对客户不产生影响，即客户的代码不必重新编译。
+	（C++）你想对客户完全隐藏抽象的实现部分。在C++中，类的表示在类接口中是可见的。
+	有许多类要生成。这样一种类层次结构说明你必须将一个对象分解成两个部分。
+UML描述：
+ 
+	从UML图可以看出，在OO中，Bridge是指把IS-A关系用HAS-A来替换。那么C语言处理这种情况是非常方便的。
+--------------------------------------案例1--------------------------------------
+以linux kernel的网络设备模型作为考察对象
+1.	struct net_device {  
+2.	        ...;  
+3.	        /* Management operations */  
+4.	        const struct net_device_ops  *netdev_ops;  
+5.	        const struct ethtool_ops  *ethtool_ops;  
+6.	        ...;  
+7.	}  
+	如果我们把网络设备视为对象的话，设备的操作方法应该是设备对象方法的一部分。但不同类型的网络设备的操作方法集不同，因此它是代码中剧烈变动的部分。但是相同类型的网络设备对象的操作方法集相同，应该共享。
+1.	/* 这是firewire网络设备的操作方法实例 */  
+2.	static const struct net_device_ops fwnet_netdev_ops = {  
+3.	    .ndo_open        = fwnet_open,  
+4.	    .ndo_stop        = fwnet_stop,  
+5.	    .ndo_start_xmit  = fwnet_tx,  
+6.	    .ndo_change_mtu  = fwnet_change_mtu,  
+7.	};  
+8.	  
+9.	/* 这是HDLC网络设备的操作方法实例 */  
+10.	static const struct net_device_ops hdlcdev_ops = {  
+11.	    .ndo_open       = hdlcdev_open,  
+12.	    .ndo_stop       = hdlcdev_close,  
+13.	    .ndo_change_mtu = hdlc_change_mtu,  
+14.	    .ndo_start_xmit = hdlc_start_xmit,  
+15.	    .ndo_do_ioctl   = hdlcdev_ioctl,  
+16.	    .ndo_tx_timeout = hdlcdev_tx_timeout,  
+17.	};  
+	使用了Bridge模式之后，对象的操作和对象的抽象分离，避免了耦合，隔离了不同设备的动作差异，也提高了重用度。打开和关闭设备的代码可以这样写，并且不受具体打开和关闭动作细节的影响。
+1.	if (netif_running(netdev))  
+2.	        netdev->netdev_ops->ndo_open(netdev);  
+3.	if (netif_running(netdev))  
+4.	        netdev->netdev_ops->ndo_stop(netdev);  
+----------------------------------（以上为）案例1-------------------------
+3.2.2 Facade
+意图：为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+适用性：
+	当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。
+	客户程序与抽象类的实现部分之间存在着很大的依赖性。引入facade 将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。
+	当你需要构建一个层次结构的子系统时，使用facade模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过facade进行通讯，从而简化了它们之间的依赖关系。
+UML描述：
+ 
+用途：一个复杂子系统只提供了一个简单接口，从而对客户屏蔽了内部细节，达到调用和实现解耦的目的。只有当一个复杂的子系统有多个剧烈变化的接口时，才考虑用Facade模式来重构。
+隐喻：家里再怎么乱都行，但门口始终是 干干净净的。
+--------------------------------------案例1--------------------------------------
+	报文需要分发给不同的任务处理，如果每个任务都有自己的收包接口，那么驱动代码就会和这些任务耦合在一起。利用Façade模式，我们可以对外只提供一个总的收包接口，具体的处理细节被封装起来。
+----------------------------------（以上为）案例1-------------------------
+
+3.2.3 Proxy
+意图:为其他对象提供一种代理以控制对这个对象的访问。在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。
+适用性：下面是一 些可以使用Proxy 模式常见情况： 
+	远程代理（Remote Proxy ）为一个对象在不同的地址空间提供局部代表。 
+	虚代理（Virtual Proxy ）根据需要创建开销很大的对象。
+	保护代理（Protection Proxy ）控制对原始对象的访问。保护代理用于对象应该有不同的访问权限的时候。
+	智能指引（Smart Reference ）取代了简单的指针，它在访问对象时执行一些附加操作。
+UML描述：
+ 
+	代理模式就是在用户和对象之间增加访问控制接口，形成“访问层”，方便控制对原始对象的访问。基于接口，而不是基于实现。这样做有几个好处：
+1.	用户代码和对象代码通过中间层解耦。
+2.	访问方式标准化，减少了出错机会。
+3.	便于控制不同用户的访问能力。
+	系统中大量使用的hook其实就是Proxy模式的一种表现形式。通过hook，平台和产品代码解耦。
+--------------------------------------案例1--------------------------------------
+	我们习惯于用灵活的TLV格式传递消息，但通常都是使用者自己写生硬的指针操作，整套代码显得风格不一致，暴露了很多缺陷。如果将来升级到多核或者可抢占系统，那么还必须解决TLV实例被共享访问的互斥问题。如果一开始就构造一个“代理”访问接口，那么问题就会被大大简化。
+1.	typedef unsigned long type_t;  
+2.	typedef unsigned long size_t;  
+3.	struct TLV {  
+4.	        atomic_t refcnt;  
+5.	        spin_lock_t lock;  
+6.	        type_t type;  
+7.	        size_t length;  
+8.	        char value[0];  
+9.	};  
+10.	/* 一组用于操作TLV的代理接口 */  
+11.	struct TLV *TLV_alloc(sizt_t length);  /* 创建一个长度为length的TLV实例 */   
+12.	type_t TLV_type(struct TLV *data);     /* 得到TLV实例的类型*/  
+13.	size_t TLV_length(struct TLV *data);   /* 得到TLV实例的长度 */  
+14.	void *TLV_value(struct TLV *data);     /* 得到TLV实例的数据首部地址 */  
+15.	void *TLV_hold(struct TLV *data);      /* 共享一个TLV引用 */  
+16.	void *TLV_put(struct TLV *data);       /* 释放一个TLV引用 */  
+17.	void TLV_release(struct TLV *data);    /* 释放TLV实例 */  
+18.	  
+19.	/* 这是分配和释放代理的一种实现 */  
+20.	struct TLV *TLV_alloc(sizt_t length)  
+21.	{  
+22.	    size_t size = sizeof(struct TLV) + length);  
+23.	    size = ALIGN_OF(size); /* 对TLV进行对齐处理 */  
+24.	  
+25.	    return malloc(size);  
+26.	}   
+27.	void TLV_release(struct TLV *data)  
+28.	{  
+29.	    if (!data) {  
+30.	        return;  
+31.	    }  
+32.	    /* 
+33.	     * 这里调用TLV_put()也是proxy模式的一种用法： 
+34.	     * 用户只要调用TLV_release()就认为自己释放TLV 
+35.	     * 的工作完成了，不用关心是否还有别的user存在。 
+36.	     */  
+37.	    TLV_put(data);  
+38.	    if (atomic_test(data->refcnt, 0) == TRUE) {  
+39.	        free(data);  
+40.	    }  
+41.	    return;  
+42.	}  
+----------------------------------（以上为）案例1-------------------------
+	代理模式的适用场景很多，最简单的莫过于放一个hook出来了。但是一定要在进行了OO设计的前提下才能放hook，否则，这个hook就和单板上的飞线一样可怕了。
+
+
+3.3行为型
+行为型模式比较多，就其中的三种进行说明：
+1.	Interpreter（解释器）
+2.	Template Method（模板方法）
+3.	Chain of Responsibility（责任链）
+4.	Command（命令）
+5.	Iterator（迭代器）
+6.	Mediator（中介者）
+7.	Memento（备忘录）
+8.	Observer（观察者）
+9.	State（状态）
+10.	Strategy（策略）
+11.	Visitor（访问者）
+
+3.3.1 Template Method（模板方法）
+意图：定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。TemplateMethod 使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+适用性：
+	一次性实现一个算法的不变的部分，并将可变的行为留给子类来实现。
+	各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。首先识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。
+	控制子类扩展。
+UML描述：
+ 
+--------------------------------------案例1--------------------------------------
+	MG建立和MGC信令连接时，固定步骤就是：1.create socket; 2. bind socket; 3. connect。然而对于采用不同传输协议，三个步骤的实现细节存在差异：
+1.	typedef TPA_ERR (*PFN_CREATE_SOCKET)(TPA_OPEN_PARA* pstTpaPara,ULONG* pulConnIndex, ULONG* pulConnSn);    
+2.	typedef TPA_ERR (*PFN_BIND_SOCKET)(TPA_OPEN_PARA* pstTpaPara,ULONG* pulConnIndex, ULONG* pulConnSn);    
+3.	typedef TPA_ERR (*PFN_CONNECT)(TPA_OPEN_PARA* pstTpaPara,ULONG* pulConnIndex, ULONG* pulConnSn);    
+4.	    
+5.	typedef struct    
+6.	{    
+7.	        PFN_CREATE_SOCKET pfCreate;    
+8.	        PFN_BIND_SOCKET pfBind;    
+9.	        PFN_CONNECT pfConnect;    
+10.	} TPA_SOCKET_OPER;    
+11.	    
+12.	VOID ConnectToMgc(TPA_OPEN_PARA* pstTpaPara,ULONG* pulConnIndex, ULONG* pulConnSn,     
+13.	                  TRANS_ENUM enTransType )    
+14.	{    
+15.	        g_astTpaSockOper[enTransType].pfCreate(pstTpaPara, pulConnIndex,  pulConnSn);    
+16.	        g_astTpaSockOper[enTransType].pfBind(pstTpaPara, pulConnIndex,  pulConnSn);    
+17.	        g_astTpaSockOper[enTransType].pfConnect(pstTpaPara, pulConnIndex, pulConnSn);    
+18.	}    
+----------------------------------（以上为）案例1-------------------------
+3.3.2 Chain of Responsibility（责任链）
+意图：使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。
+适用性：
+	有多个的对象可以处理一个请求，哪个对象处理该请求运行时刻自动确定。
+	你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。
+	可处理一个请求的对象集合应被动态指定。
+UML描述：
+ 
+3.3.3 State（状态）
+意图：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。
+适用性：
+	一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。
+	一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+
+--------------------------------------案例1--------------------------------------
+	ip协议栈在解析完报文之后，需要决定报文的去向。可能传递到L4，也可能转发，或者干脆丢弃。一种实现方法是用分支来控制流程。
+1.	if (Packet) {  
+2.	    switch (Packet->dst) {  
+3.	        case PKT_DST_LOCAL:  
+4.	             return local_rcv(Packet);  
+5.	        case PKT_DST_OTHER:  
+6.	             return forward_packet(Packet);  
+7.	        /* 缺省也是丢弃 */  
+8.	        case PKT_DST_BLACKHOLL:  
+9.	             return packet_blackholl(Packet);  
+10.	        default:  
+11.	             return RES_DROP;  
+12.	    }  
+13.	}  
+	这样的实现将导致调用者感知到报文去向的细节，不利于解耦。因此，可以用State模式在查路由表的时候就动态改变Packet的“投递”行为。
+1.	void fib_lookup(struct sk_buff *Packet)  
+2.	{  
+3.	        if (__fib_lookup(LOCAL_TABLE, Packet) == RES_SUCC) {  
+4.	            Packet->dst = PKT_DST_LOCAL;  
+5.	            Packet->deliver = &skb_deliver_hook;  
+6.	            return;  
+7.	        }  
+8.	        if (__fib_lookup(MAIN_TABLE, Packet) == RES_SUCC) {  
+9.	            Packet->dst = PKT_DST_OTHER;  
+10.	            Packet->deliver = &skb_deliver_hook;  
+11.	            return;  
+12.	        }  
+13.	        if (blackholl_need(Packet)) {  
+14.	            Packet->dst = PKT_DST_BLACKHOLL;  
+15.	            Packet->deliver = &blackholl_consume_hook;  
+16.	            return;  
+17.	        }  
+18.	}  
+19.	
+20.	/* 转发流程看起来就简单多了 ：不同的Packet有不同的行为 */  
+21.	fib_lookup(Packet);  
+22.	return Packet->deliver(Packet);  /* 把对象自己传入，相当于C++的this指针 */  
+----------------------------------（以上为）案例1-------------------------
+总结
+	切莫为了套用设计模式而在编码风格上趋近C++。
+	以上仅列举了部分设计模式形式。学习内容有限，并且也未更加深入的理解各设计模式在C语言应用的上的区别和特点，但是学习是个过程，将内容消化吸收应用于工作中，写出更好的代码。

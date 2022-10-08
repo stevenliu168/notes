@@ -1,0 +1,123 @@
+编程小技巧：显示调用构造和析构函数简要
+日期：2010-07-06 20:39浏览：233评论：0
+关于C++的构造和析构，编程的都耳熟能详了，但主动调用构造和析构，却不常见，下面简要介绍一下其应用
+
+ 
+
+一、new和delete的工作方式
+C++的对象分配，有两个过程：首先是为对象分配空间，然后在此空间上构造对象。可以认为过程如下：
+char *pSpace = new char[sizeof(Object)];//分配空间
+new pSpace Object();//在pSpace位置调用对象的构造函数，构造对象。
+
+C++的对象释放，也有两个过程：首先是释放对象本身，然后再释放对象占用的空间。可以认为过程如下：
+(Object *)pSpace->~Object();//调用对象的析构函数，摧毁对象，但对象本身占用的空间并未释放
+delete []pSpace;//释放对象本身占用的空间
+
+二、普遍的理解和用法
+我们习以为常的使用如下：
+Object *pOb = new Object;
+delete pOb;
+也就是说为对象分配空间和构造对象本身是合二为一的，这是我们所习惯的。但有些场景下，把两者拆分，可以获得意想不到的效果，这跟某些时候额外的间接层是必要的一样。主动调用构造和析构并不提倡。但此技术广泛地应用于一些工具类，我们也可以把它应用到高效率的内存池管理等场景。参考如下的例子：
+
+三、代码实例
+
+演示主动调用构造和析构函数，以循环利用空间，避免空间的频繁分配和释放，此方法可利用到内存池等多个应用场景。通过测试代码可以体味上述的两个过程。
+
+
+#include
+#include
+#include
+//调用构造函数，在指定的空间上构造对象
+templatevoid construct(T1 *_P, const T2&_V)
+{
+ new ((void *)_P) T1(_V);
+}
+
+//用宏转接一下，以便于调用析构函数
+#define _DESTRUCTOR(ty, ptr) (ptr)->~ty()
+//调用析构函数，仅仅析构对象本身，但不释放对象本身占用的空间
+template
+inline void _Destroy(_Ty *_P)
+{
+ _DESTRUCTOR(_Ty, _P);
+}
+templatevoid destroy(ForwardI first, ForwardI last)
+{
+   while (first != last)
+   {
+    _Destroy(first);
+    first++;
+   }
+}
+
+//一个测试类，拥有动态分配内存的成员
+class CSample
+{
+public:
+ CSample(int x):val(x)
+ {
+  pValue = new int;
+  *pValue = val;
+ }
+ CSample(const CSample& rf)
+ {
+  val = rf.val;
+  pValue = new int;
+  *pValue = val;
+ }
+ virtual~CSample()
+ {
+  delete pValue;
+  pValue= NULL;
+ }
+ virtual int get() {return val;}
+protected:
+ int val;
+ int *pValue;
+};
+//测试类的子类，没有添加任何新的变量，对象本身占用的空间大小与基类等同
+class CSample2:public CSample
+{
+public:
+ CSample2(int x):CSample(x)
+ {
+ }
+ CSample2(const CSample2& rf):CSample(rf)
+ {
+ }
+ virtual~CSample2()
+ {
+ }
+ virtual int get() {return val;}
+private:
+};
+//下例展示了主动调用构造和析构函数，循环利用空间，避免空间的频繁分配和释放，此方法可利用到内存池等多个应用场景
+int main()
+{
+ //定义三个对象
+ CSample A[] = {CSample(1),CSample(2),CSample(3)};
+ printf("The three samples value = %d, %d, %d.\n",A[0].get(), A[1].get(), A[2].get());
+ //析构三个对象
+ destroy(A, A+3);
+ 
+ //在已经分配的空间上创建CSample新的对象
+ construct(A+0, CSample(10));
+ construct(A+1, CSample(11));
+ construct(A+2, CSample(12));
+ printf("The new three samples value = %d, %d, %d.\n",A[0].get(), A[1].get(), A[2].get());
+
+ //析构三个对象
+ destroy(A, A+3);
+
+ //再析构的空间上创建CSample2对象
+ construct((CSample2*)A+0, CSample2(20));
+ construct((CSample2*)A+1, CSample2(21));
+ construct((CSample2*)A+1, CSample2(22));
+ printf("The new three sub samples value = %d, %d, %d.\n",A[0].get(), A[1].get(), A[2].get());
+   
+ //等待输入以便于查看输出结果
+ char ch;
+ std::cout<<"\nPrint any char and enter to exit.\n";
+ std::cin>>ch;
+ return 0;
+}

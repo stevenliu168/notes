@@ -1,0 +1,116 @@
+通用编解码器的设计模式应用与源码剖析三(策略与享元模式）
+日期：2013-08-05 14:12浏览：675评论：3
+上接http://3ms.huawei.com/hi/blog/5712_1279373.html。继续就解析树的设计话题讨论。
+
+一、Strategy模式
+
+ 
+
+策略模式就是组合了一个算法集，具体的算法与使用是相互独立，正交的，策略模式的类协作图参考模式一书，本文只给出个人的感悟观点和真实的产品中的摸样。
+
+ 
+
+1 设计教训：
+
+以整数类型举例，整数通常有十流进制与十六进制两种显示方式，老版本定义了两个子类型DECIMAL和HEX（其实考虑长度后是8个甚至16个），以此思路，如果支持二进制与八进制，单就整数的子类数量要double，而字符串与数组等类型有时也需要按照十进制或者十六进制显示原始码流…。对于这颗继承树，为啥没控制住规模，问题在哪儿呢？问题就在于把格式与类型混淆一体，把格式（算法）也当成类型，而类型与算法本来是正交的，两者要混为一体，则子类数量=类型数*算法数，具有一定规模后，新增算法或子类的难度与工作量就越来越大，比如算法有8个，子类有8，正交后最多64个子类，再增加一种算法或者子类，就要新增加8个子类。变更的成本不是线性的，更不可能是常数的，可能是n的二次方。
+
+ 
+
+2 解决方案：
+
+如果把算法与类型分别定义，并让两个正交的继承树组合一下，情况就大不一样，这就是策略模式。难点就是要识别出独立于使用上下文的算法，并为各种算法提供统一的接口，统一的接口就不能不优先考虑继承，继承本身不是坏事，只是继承要保持血统的纯正，要剔除异类性，换种方式打交道，新的设计采用策略模式以正交的方式来打交道。杂交后果非常危险，可能导致整个继承树就如失控的原子弹链式反应，不敢让它再变化哪怕那么一点点。
+
+ 
+
+使用Strategy模式的两颗正交继承树如下：
+
+右边新增加一种算法类型完全独立于左边的继承树，新增算法所增加的子类数是常数1，如果不是正交的两颗树，最大数目就是左边的子类个数。
+
+
+二、Flyweight模式
+
+截止目前，许多心思花费在如何控制子类的数量，此处的flyweight却刚好相反，通过范特化实现却新增加子类的规模，参考上图的数组类型的设计。
+
+设计模式一书中的Flyweight，阅读起来很晦涩，例子是文本编辑器的设计，首先是正交设计，分离数据（字或图标）与其外部状态（字体颜色等），数据与外部状态是正交的，相互是共享的；其次是封装对象获取接口，对象构建独立于使用上下文；最后锦上添花地提供了共享资源池进一步压缩对象的个数。三种方法都是以减少内存开销为目的，在灵活性与内存占用方面找到一个平衡点。
+
+Flyweight模式本身应用得比较少，本例的数据不是持久化的，解码后很快就没用了，故共享资源池是针对数据本身，没有对上下文构建共享资源池。类图关系未画出来，麻烦你多转转了：）多写点字来说明影响设计的原因及其工作原理，具体如下：
+
+1 共享上下文
+
+在上文中的“疑问一”有提及，数组本身也是容器，但是把每个字节等都做为一个元素，1M字节需要100万个元素组合而来，无论性能或者容量都无法被接受，故数组独立于容器。同时把数组分为两类，一类是把每个元素（元素可以是任何基本类型，也可以是任意复杂的聚合结构）都当成一个MsgField子类型，此类型是ArrayGeneralField；而对于常用的字节与整数数组，提供三个特化实现，所有的数组元素共享context（上下文），context包含编码类型、字节对齐、隐藏、敏感内容、长度和大小等。比如对于1M的字节，ArrayByteField相比ArrayGeneralField，节省了1024*1024-1个上下文，而每个上下文占用空间大概在50字节左右，上下文占用空间就需要50M，而数据本身只有1M。应该可以感受到为啥书中要强调外部状态与内部状态的分离，同时把两者正交后，再分别提供共享资源池也才成为可能。
+
+2 数据共享资源池与接口
+
+本例中的数组未提供共享资源池，但是对于可选参数TLVField子类型，做了此设计。熟悉Diamitter或SMPP3.4等协议的兄弟，应该很清楚，此类协议可选参数多，比如个人所在产品的Diamitter协议包含近400个AVP（可选参数）和11种消息，每种消息都可能聚合这些可选参数，那么每种消息都重复存储AVP，随着消息增多，内存开销就非常大，故对于AVP部分，会创建400个的AVP资源池，所有消息共享。通过如下接口访问共享资源：
+
+public interface PublicTLVRequest
+
+{
+
+public MsgField requestTagField (long tlvTag) throws StreamException;
+
+}
+
+而资源获取接口由外部初始化，在解析码流时由外部传入，需要时就申请分配一个可选参数对象。部分代码如下：
+
+protected void decodeImp(ByteBuffer input, ParsePublicContext publicContext) throws StreamException
+
+{
+
+     
+
+      PublicTLVRequest tlvRequstIF = publicContext.getTlvRequest();
+
+      BuilderContext curContext = getBuilderContext();
+
+      String breakExpression = curContext.getBreakExpression();
+
+      while (input.position() < input.limit())
+
+      {
+
+            //符合结束条件，终止可选参数的解析
+
+            if (0 != ExpressionHelper.getExpressionValueWithKeyword(this, input, breakExpression))
+
+            {
+
+                break;
+
+            }
+
+           
+
+            //先解析可选参数tag
+
+            MsgField tagDecoder = tlvRequstIF.requestTagField(getTagName());//从共享资源池接口获取对象
+
+            int originalPos = input.position();
+
+            tagDecoder.decode(input, publicContext);
+
+            input.position(originalPos);
+
+           
+
+            //根据tag获取对应的可选参数对象，进一步解码
+
+            MsgField curTLV = tlvRequstIF.request(tagDecoder.getLongValue());//从共享资源池接口获取对象
+
+            curTLV.setParent(this);
+
+            children.put(curTLV.getTagName(), curTLV);
+
+            curTLV.decode(input, publicContext);
+
+        }
+
+}
+
+ 
+
+上述代码涉及到两个外部状态（上下文），前面小节中所提的上下文就是BuilderContext，它与数据的关系就更紧密些，在协议文件中直接配置，如下（string类型的上下文包含长度及其字段名字）：<field tag="DestAddr" type="string" length="21" />。资源分配所涉及的上下文是ParsePublicContext，外部不可见，是程序内部处理。
+
+ 
+
+后面一节就职责链与创建模式展开，未完待续。下接：http://3ms.huawei.com/hi/blog/5712_1281469.html

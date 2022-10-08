@@ -1,0 +1,235 @@
+简单代码写好也不容易--随笔
+日期：2015-05-21 14:50浏览：880评论：22
+刚合入代码，看到如下的带有映射逻辑的if-else代码片段，其实这样逻辑很普遍。
+
+int CVirtualDialog::chartoint(unsigned char c)
+
+{
+
+    int ret;
+
+    if(c == '0')
+
+        ret = 0;
+
+    else if( c == '1')
+
+        ret = 1;
+
+    else if( c == '2')
+
+        ret = 2;
+
+    else if( c == '3')
+
+        ret = 3;
+
+    else if( c == '4')
+
+        ret = 4;
+
+    else if( c == '5')
+
+        ret = 5;
+
+    else if( c == '6')
+
+        ret = 6;
+
+    else if( c == '7')
+
+        ret = 7;
+
+    else if( c == '8')
+
+        ret = 8;
+
+    else if( c == '9')
+
+        ret = 9;
+
+    else if(c=='a' || c=='A')
+
+        ret = 10;
+
+    else if(c=='b' || c=='B')
+
+        ret = 11;
+
+    else if(c=='c' || c=='C')
+
+        ret = 12;
+
+    else if(c=='d' || c=='D')
+
+        ret = 13;
+
+    else if(c=='e' || c=='E')
+
+        ret = 14;
+
+    else if(c=='f' || c=='F')
+
+        ret = 15;
+
+    else
+
+        ret = 0;
+
+ 
+
+    return ret;
+
+}
+
+不好的地方：
+
+A）复杂度高，执行效率差。
+
+B） 代码臃肿，死板，无任何抽象。
+
+ 
+
+改进一：分段的if-else逻辑
+
+
+int CVirtualDialog::chartoint(unsigned char c)
+
+{
+
+    int ret;
+
+if (c>='0' && c<='9')
+
+       ret = c - '0';
+
+else if(c>='a" && c<='f')
+
+       ret = c - 'a'+10;
+
+else if(c>='A" && c<='F')
+
+       ret = c - 'A'+10;
+
+else
+
+       ret = 0;
+
+return ret;
+
+}
+
+ 
+
+不好的地方：
+
+C） 代码依然不简洁。
+
+D）代码依然不高效。
+
+ 
+
+改进二：使用映射表
+
+有映射逻辑的if-else语句，常常能被映射表替换，而数组是最简单也最高效的映射表，在编码中常常会使用到它，比如此处：
+
+ 
+
+
+申明类的成员变量m_ char2IntMapping [255];
+
+CVirtualDialog:: CVirtualDialog//构造函数初始化
+
+{
+
+memset(m_char2IntMapping, 0, sizeof(m_char2NumberMapping));
+
+m_ char2IntMapping [‘0’] = 0;
+
+….
+
+}
+
+int CVirtualDialog::chartoint(unsigned char c)
+
+{
+
+     return m_char2NumberMapping[c];
+
+}
+
+ 
+
+不好的地方：
+
+A）m_ char2IntMapping不应该是此类的成员变量，而代码中我们也常能遇到见缝插针的实现，跟停车一样，所有空间都利用得满当当的，随便找个地方靠下,而这往往是依赖复杂度的根源（许多不必要的网状甚至本末倒置的依赖或循环依赖）
+
+B）chartoint应该是内联，一次函数调用开销完全没必要
+
+ 
+
+改进三：单例映射表
+
+m_ char2IntMapping不应该是CVirtualDialog的成员，如下的实现或许更优雅：
+
+class CChar2IntMapping
+
+{
+
+public:
+
+    static int toInt(unsigned int ch)//内联，让调用更高效
+
+    {
+
+        return m_table[ch];
+
+    }
+
+private:
+
+    CChar2IntMapping();
+
+    ~CChar2IntMapping(){};
+
+private://单例，构造函数完成静态映射表的初始化
+
+    static CChar2IntMapping m_instance;
+
+    static int m_table[255];
+
+};
+
+ 
+
+CChar2IntMapping CChar2IntMapping::m_instance;
+
+CChar2IntMapping::CChar2IntMapping()
+
+{
+
+m_table['0'] = 0;
+
+…
+
+}
+
+ 
+
+不好的地方：
+
+A) 可能有些兄弟会抱怨这么写，文件或类是否太多了。个人倒认为职责单一，逻辑内聚，这是最关键的，前面的担心大可不必。
+
+ 
+
+ 
+
+ 代码要写好不容易，好习惯，惯性思维，善用工具，利用好他人成果的前提是要能深入了解（不是简单的拿来，拿来的平台或开源等可能只解决了有无问题，但其厚重或其它等各方面的问题会带来更多麻烦，很可能骑虎难下贻害无穷），掌握多门语言，阅读优秀作品，更要多改进已有的实现。
+
+ 
+
+关于性能的质疑，测试代码如下：
+
+ 三者在Windows下启用内联优化，性能比大概为：110:79:31。而对于优化3，查看汇编代码，优化3中函数本身指令只有1条，时间耗费在循环、取数组变量值与累加上，而1条指令本身的耗时占比不到5，而对于1与2，函数本身的占比时间就比较大，只算函数本身，一个数量级差距是毫无夸张的。从执行的指令条数也可看到，1的代码平均要执行40条指令，而2平均执行20多条指令，3只有一条取值指令。
+
+-Cpp 代码

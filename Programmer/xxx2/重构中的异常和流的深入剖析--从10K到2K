@@ -1,0 +1,197 @@
+重构中的异常和流的深入剖析--从10K到2K
+日期：2011-03-23 14:03浏览：775评论：5
+在我们的产品中,某些协议的编解码代码有10K左右,而使用流与异常结合,代码不到2K左右.下面将详细剖析相关的编码风格与重构思考.
+
+ 
+
+刚看到一博文"从代码找茬到代码重构http://hi3ms.huawei.com/blog/1360_42966.html".例子中有段代码:对一个函数连续数次调用,每次调用均判断函数返回值是否成功,失败就终止.基于C语言的函数返回值判断风格,复杂度、臃肿和重复是不可避免的，当然可以通过宏或模版等小技巧让代码看上去舒服些，但是此种场景或许找不到有比异常更合适,处理后的代码更简洁、高效和清晰了。
+
+ 
+
+上述场景在产品中实际比比皆是，让我想到了三年前的一个重构（目前在产品中已广泛使用），这里先谈谈异常编码风格，在C++语言中，异常会带来控制流的复杂化（与传统的顺序、判断、循环和函数调用窘异），同时要编写异常安全性代码非常困难，如果有替代方案，一般经典的建议是尽量不要使用异常。但是分离逻辑代码与错误处理代码，把错误集中处理的场景，异常就责无旁贷了。
+
+ 
+
+参考下述的一个更典型的案例重构：某协议的编解码器，当某个字段解析错误，就中止解析，并做相应的处理。
+
+用C语言风格实现的某个消息的解码过程如下(从源Buffer中逐一解析每个字段到目的Buffer,失败终止,返回错误码)：
+
+int CSmppCompAndUnComp::fnGetSubmitSm(char *pOrgBuff,int& nHasDecodedSize,char *pDestBuff,int& nDestSize){
+     Submit_Sm *pSS = (Submit_Sm *)pDestBuff;
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->service_type,sizeof(pSS->service_type))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr_ton,sizeof(pSS->source_addr_ton))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr_npi,sizeof(pSS->source_addr_npi))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr,sizeof(pSS->source_addr))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->dest_addr_ton,sizeof(pSS->dest_addr_ton))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->dest_addr_npi,sizeof(pSS->dest_addr_npi))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->destination_addr,sizeof(pSS->destination_addr))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->esm_class,sizeof(pSS->esm_class))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->protocol_ID,sizeof(pSS->protocol_ID))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->priority_flag,sizeof(pSS->priority_flag))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->schedule_delivery_time,sizeof(pSS->schedule_delivery_time))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->validity_period,sizeof(pSS->validity_period))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->registered_delivery_flag,sizeof(pSS->registered_delivery_flag))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->replace_if_present_flag,sizeof(pSS->replace_if_present_flag))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->data_coding,sizeof(pSS->data_coding))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->sm_default_msg_id,sizeof(pSS->sm_default_msg_id))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+     if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->sm_length,sizeof(pSS->sm_length))==DECODE_PROTOCOL_ERROR)
+          return(DECODE_PROTOCOL_ERROR);
+
+.......
+
+}
+
+ 
+
+重构步骤一、用异常机制改造：
+
+上述解码过程就是典型的C语言风格，虽然代码比较清晰，但是整个解码过程被错误判断给掩没了。用异常方式重构：fnGetFromCode错误时抛出异常，函数无返回值，则改造如下：
+
+int CSmppCompAndUnComp::fnGetSubmitSm(char *pOrgBuff,int& nHasDecodedSize,char *pDestBuff,int& nDestSize){
+
+    try{
+
+         Submit_Sm *pSS = (Submit_Sm *)pDestBuff;
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->service_type,sizeof(pSS->service_type));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr_ton,sizeof(pSS->source_addr_ton));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr_npi,sizeof(pSS->source_addr_npi));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->source_addr,sizeof(pSS->source_addr));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->dest_addr_ton,sizeof(pSS->dest_addr_ton));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->dest_addr_npi,sizeof(pSS->dest_addr_npi));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->destination_addr,sizeof(pSS->destination_addr));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->esm_class,sizeof(pSS->esm_class));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->protocol_ID,sizeof(pSS->protocol_ID));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->priority_flag,sizeof(pSS->priority_flag));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->schedule_delivery_time,sizeof(pSS->schedule_delivery_time));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->validity_period,sizeof(pSS->validity_period));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->registered_delivery_flag,sizeof(pSS->registered_delivery_flag));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->replace_if_present_flag,sizeof(pSS->replace_if_present_flag));
+         if(fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->data_coding,sizeof(pSS->data_coding))==DECODE_PROTOCOL_ERROR)
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->sm_default_msg_id,sizeof(pSS->sm_default_msg_id));
+         fnGetFromCode(pOrgBuff,nHasDecodedSize,pSS->sm_length,sizeof(pSS->sm_length));
+
+    }
+
+    catch (int error){
+
+        return error;
+
+    }
+
+    return 0;
+
+}
+
+ 
+
+上述代码更简洁（呈现的全是解码过程），更高效（CPU省去了大量if判断），但是是否到此为止呢？实际上述的编解码本身就是流的解析，能否提供一些公共流接口呢？来应对产品中各种协议或码流的解析呢？
+
+ 
+
+重构步骤二、流接口的抽象
+
+int CSmppCompAndUnComp::fnGetSubmitSm(IInputStream&input,char *pDestBuff){
+
+    try{
+         Submit_Sm *pSS = (Submit_Sm *)pDestBuff;
+         input>>pSS->service_type>>pSS->source_addr_ton>>pSS->source_addr_npi>>pSS->source_addr
+          >>pSS->dest_addr_ton>>pSS->dest_addr_npi>>pSS->destination_addr>>pSS->esm_class
+          >>pSS->protocol_ID>>pSS->priority_flag>>pSS->schedule_delivery_time>>pSS->validity_period
+          >>pSS->registered_delivery_flag>>pSS->replace_if_present_flag>>pSS->data_coding
+          >>pSS->sm_default_msg_id>>pSS->sm_length;
+
+    }
+
+    catch (int error){
+
+        return error;
+
+    }
+
+    return 0;
+
+}
+
+ 
+
+或许找不到有比流更让人爽心悦目的实现方式了吧，使用及其简便（编码过程是相反过程<<），而代码就简简单单地一行。更关键的是这个解码函数可支持任意的输入流,而不会为每种不同输入都写解码函数;同时流的接口又抽象出来成为公共代码，具有极大的可重用性。
+
+输入流（解码）和输出流（编码）的公共接口分别如下：
+
+ 
+
+class IInputStream{//解码器公共接口
+public:
+
+    //从磁盘、缓冲或网络等介质解析码流（下游也可以是个流对象），下面的函数失败会抛出异常，务必捕捉
+    virtual IInputStream& operator>>(__UINT8& by);//编码一个字节
+    virtual IInputStream& operator>>(__UINT16& w);//解码两个字节
+    virtual IInputStream& operator>>(__UINT32& dw);//解码四个字节
+    virtual IInputStream& operator>>(__INT32& i){return operator>>((__UINT32&) i);}
+    virtual IInputStream& operator>>(char& ch){return operator>>((__UINT8&) ch);}
+    virtual IInputStream& operator>>(const COctect& rfOctect);//解码指定的字节数
+    //从磁盘或网络得到的码流可能被破坏或不可信任，字符串可能没有结束符，对于此类输入，用户不能调用此接口，务必把char*类型转换为COctect类型来指定最大长度，
+    //以让函数做充分的检查，确保调用的安全性
+    IInputStream& operator>>(char *pszChar);//解码一个字符串，遇到0返回
+    virtual void Seek(int iOffset);//重定向
+public:
+    IInputStream(const char *lpszFileName);//输入为文件
+    IInputStream(char*pOrgBuff);//输入为某缓重
+    ........
+};
+
+class IOutputStream{//编码器公共接口
+public:
+     //写入数据到磁盘或缓冲等介质（下游也可以是个流对象），下面的函数失败会抛出异常，务必捕捉
+     virtual IOutputStream& operator<<(__UINT8 by);//编码一个字节
+     virtual IOutputStream& operator<<(__UINT16 w);//编码二个字节
+     virtual IOutputStream& operator<<(__UINT32 dw);//编码四个字节
+     virtual IOutputStream& operator<<(__INT32 i){return operator<<((__UINT32) i);}
+     virtual IOutputStream& operator<<(char ch){return operator<<((__UINT8) ch);}
+     virtual IOutputStream& operator<<(const COctect &rfOctect);//编码指定长度
+     //编码字符串
+     virtual IOutputStream& operator<<(const char *pszChar){return operator<<(COctect(pszChar, strlen(pszChar)+1, TRUE));}
+     virtual void Seek(int iOffset);//重定项流
+public:
+     IOutputStream(const char *lpszFileName);//目标对象是文件
+     IOutputStream(char*pDestBuff);//目标对象是一块内存
+
+     .......
+
+};
+
+ 
+
+实际错误处理还可继续集中。每个消息的解码或编码函数不用捕捉异常，函数无返回值，由外层来统一捕捉，演变如下：
+
+ 
+
+重构步骤三、设置沙箱形式或者防火墙形式，集中处理错误或者过滤错误
+
+错误处理代码还可继续提取,统一到一处，集中做日志、告警、统计和过滤等处理，从而演变为架构上的整体策略。个人认为两种典型情况就是（想画图更好表达，可上班有一阵子了，偷偷懒做正事吧，今天部门活动还得早早点下班：））：
+
+1、防火墙形式：过滤掉外部错误，让内部处于安全和完全可信任状态，无需要到处判断错误。
+
+2、沙箱形式：运行环境构建于沙箱上，代码无需要捕捉不相关的错误，由低层做统一的处理。
+
+当然具体应用时，也会是上述两种情况的结合。
+
+ 
+
+总结：错误处理不是到处点缀的野花，其实在产品中处理得很不好，更形象点是shit，因为处理太随意，只要不遗漏异常分支即可。其实错误处理涉及到程序可读性、健壮性和可维护性等方方面面，通过上述的一个案例我们可以看到良好的风格与技术的应用，能极大地改善各质量属性，产品应该形成自己统一的风格，在架构上必须有整体的约束和策略。

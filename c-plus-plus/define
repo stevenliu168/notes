@@ -64,3 +64,10 @@ printf("int max: %s\n",STR(INT_MAX));
 printf("%d\n", CONS(A, A));
 //输出为：200
 //CONS(A, A) --> _CONS((2), (2)) --> int((2)e(2))
+
+search key:c++ define里面的#
+https://www.cnblogs.com/8335IT/p/15982187.html
+c++ define里边的#
+1  #把宏参数变成一个字符串。#写在宏参数的前边；
+假定 class_name 是 CMyClass，那么 #class_name = “CMyClass”, #就是将参数变成字符串。
+2 而## 则是连接作用，是省略：ms_Info##class_name = ms_infoCMyClass

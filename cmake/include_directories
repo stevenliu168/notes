@@ -1,0 +1,9 @@
+https://blog.csdn.net/weixin_43742643/article/details/115296271
+1.target_include_directories 的功能完全可以使用 include_directories 实现。
+2.include_directories(header-dir) 是一个全局包含，向下传递。就是说如果某个目录的 CMakeLists.txt 中使用了该语句，其下所有的子目录默认也包含了header-dir 目录。
+3.在最终子目录的 CMakeLists.txt 文件中，使用 include_directories 和 target_include_directories 的效果是相同的。
+
+https://blog.csdn.net/weixin_45935219/article/details/120655782
+cmake中 target_include_directories的用法
+
+

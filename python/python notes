@@ -1,3 +1,4 @@
+________________________________________________________________________________________________________________________________
 配置python更新的源
 
 lxn@ubuntu:/home/newdisk2/lxn/ARMNativeReop/pclintxtoolbox/bin$ cd /home/lxn
@@ -13,12 +14,13 @@ lxn@ubuntu:~/.pip$ python -m pip install regex
 
 查看python安装的模块
 lxn@ubuntu:~/.pip$ pip list
-
+________________________________________________________________________________________________________________________________
 
 search key:ImportError: No module named mako.template
 
 编译错误问题解决：No module named mako.template
 failed make: *** [ninja_wrapper] Error 1 解决方案：安装mako模块即可 $ sudo apt-get install python-mako,
+________________________________________________________________________________________________________________________________
 
 http://3ms.huawei.com/km/blogs/details/10883261
 【环境配置】repo /usr/bin/env: ‘python’: No such file or directory
@@ -29,3 +31,37 @@ apt-get install python2.7
 （2）手动创建python软连接指向python2.7，使得python命令默认使用2.7版本
 cd /usr/bin/
 ln -s python2.7 python
+________________________________________________________________________________________________________________________________
+
+search key:ubuntu python3.8.10
+
+https://blog.csdn.net/lly1122334/article/details/126846882
+Ubuntu安装新版本Python3.8
+
+问题描述 
+Ubuntu 18.04 安装新版本 Python 3.8 
+ 
+解决方案 
+sudo apt update   #更新包列表
+
+sudo apt install software-properties-common   #安装必要组件
+
+sudo add-apt-repository ppa:deadsnakes/ppa   #添加来源列表
+
+sudo apt install python3.8   #安装新版本Python3.8
+
+sudo apt install python3-pip   #安装pip
+
+会同时安装 Python 3.6.9 和 Python 3.8.14 
+ 
+修改默认程序 
+基于软链接
+ls -l /usr/bin/python*   #列出所有Python
+
+sudo rm /usr/bin/python   #删除默认软链接
+
+sudo ln -s /usr/bin/python3.8 /usr/bin/python   #创建软链接python
+
+sudo ln -s /usr/bin/python3.8 /usr/bin/python3   #创建软链接python3
+
+sudo ln -s /usr/bin/pip3 /usr/bin/pip   #创建软链接pip

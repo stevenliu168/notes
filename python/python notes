@@ -32,7 +32,28 @@ apt-get install python2.7
 cd /usr/bin/
 ln -s python2.7 python
 ________________________________________________________________________________________________________________________________
+python3.postinst:py3compile:not found
+https://blog.csdn.net/kinggang2017/article/details/87922080
 
+py3compile: not found 的解决方法
+To fix the issue, try the following:
+Correct a system with broken dependencies in place by:
+    sudo apt-get -f install
+Reconfigure all unpacked, but unconfigured packages by:
+    sudo dpkg --configure -a
+If above won't help, try reinstalling python3-minimal package by:
+    sudo apt install if --reinstall python3-minimal
+
+Alternatively run:
+    apt-get download python3-minimal
+    sudo dpkg -i *python3*.deb
+    sudo apt install -f
+    
+Or download the .pkg file from kernel.org and install from the file by:
+    sudo dpkg -i python3-minimal_*.deb
+Then make sure that py3compile and py3clean commands are runnable and are accessible from your PATH variable.
+
+________________________________________________________________________________________________________________________________
 search key:ubuntu python3.8.10
 
 https://blog.csdn.net/lly1122334/article/details/126846882
